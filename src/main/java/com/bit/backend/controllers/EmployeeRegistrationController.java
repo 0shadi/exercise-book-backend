@@ -22,11 +22,11 @@ public class EmployeeRegistrationController {
     }
 
     @PostMapping("/employee-registration")
-    public ResponseEntity<EmployeeRegistrationDto> addEmployee(@RequestBody EmployeeRegistrationDto employeeRegistrationDto){
+        public ResponseEntity<EmployeeRegistrationDto> addEmployee(@RequestBody EmployeeRegistrationDto employeeRegistrationDto){
         try{
             EmployeeRegistrationDto employeeRegistrationDtoResponse = employeeRegistrationServiceI.addEmployeeRegistrationEntity(employeeRegistrationDto);
 
-            return ResponseEntity.created(URI.create("/employee-registration" + employeeRegistrationDtoResponse.getFullName())).body(employeeRegistrationDtoResponse);
+            return ResponseEntity.created(URI.create("/employee-registration" + employeeRegistrationDtoResponse.getEmployeeNumber())).body(employeeRegistrationDtoResponse);
 
         }catch (Exception e){
             throw new AppException("Request failed with error " + e, HttpStatus.INTERNAL_SERVER_ERROR);

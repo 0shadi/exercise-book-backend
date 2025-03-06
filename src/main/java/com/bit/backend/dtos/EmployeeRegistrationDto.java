@@ -7,25 +7,45 @@ public class EmployeeRegistrationDto {
     private String fullName;
     private String callingName;
     private String nic;
+    private String contactNo;
     private LocalDate bDay;
     private String gender;
     private String address;
-    private int emergencyContactNumber;
+    private String emergencyContactNumber;
     private String email;
+    private String jobRole;
 
-    public EmployeeRegistrationDto() {
+    public String getContactNo() {
+        return contactNo;
     }
 
-    public EmployeeRegistrationDto(String email, int emergencyContactNumber, String address, String gender, LocalDate bDay, String nic, String callingName, String fullName, long id) {
-        this.email = email;
-        this.emergencyContactNumber = emergencyContactNumber;
-        this.address = address;
-        this.gender = gender;
-        this.bDay = bDay;
-        this.nic = nic;
-        this.callingName = callingName;
+    public void setContactNo(String contactNo) {
+        this.contactNo = contactNo;
+    }
+
+    public String getJobRole() {
+        return jobRole;
+    }
+
+    public void setJobRole(String jobRole) {
+        this.jobRole = jobRole;
+    }
+
+    public EmployeeRegistrationDto(long employeeNumber, String fullName, String callingName, String nic, String contactNo, LocalDate bDay, String gender, String address, String emergencyContactNumber, String email, String jobRole) {
+        this.employeeNumber = employeeNumber;
         this.fullName = fullName;
-        this.employeeNumber = id;
+        this.callingName = callingName;
+        this.nic = nic;
+        this.contactNo = contactNo;
+        this.bDay = bDay;
+        this.gender = gender;
+        this.address = address;
+        this.emergencyContactNumber = emergencyContactNumber;
+        this.email = email;
+        this.jobRole = jobRole;
+    }
+
+    public EmployeeRegistrationDto() {
     }
 
     public String getEmail() {
@@ -36,11 +56,11 @@ public class EmployeeRegistrationDto {
         this.email = email;
     }
 
-    public int getEmergencyContactNumber() {
+    public String getEmergencyContactNumber() {
         return emergencyContactNumber;
     }
 
-    public void setEmergencyContactNumber(int emergencyContactNumber) {
+    public void setEmergencyContactNumber(String emergencyContactNumber) {
         this.emergencyContactNumber = emergencyContactNumber;
     }
 

@@ -20,6 +20,9 @@ public class EmployeeRegistrationEntity {
     @Column(name="nic_number")
     private String nic;
 
+    @Column(name="contact_no")
+    private String contactNo;
+
     @Column(name="birth_date")
     private LocalDate bDay;
 
@@ -30,24 +33,45 @@ public class EmployeeRegistrationEntity {
     private String address;
 
     @Column(name="emergency_contact_number")
-    private int emergencyContactNumber;
+    private String emergencyContactNumber;
 
     @Column(name="email")
     private String email;
 
-    public EmployeeRegistrationEntity() {
-    }
+    @Column(name="job_role")
+    private String jobRole;
 
-    public EmployeeRegistrationEntity(long employeeNumber, String fullName, String callingName, String nic, LocalDate bDay, String gender, String address, int emergencyContactNumber, String email) {
+    public EmployeeRegistrationEntity(long employeeNumber, String fullName, String callingName, String nic, String contactNo, LocalDate bDay, String gender, String address, String emergencyContactNumber, String email, String jobRole) {
         this.employeeNumber = employeeNumber;
         this.fullName = fullName;
         this.callingName = callingName;
         this.nic = nic;
+        this.contactNo = contactNo;
         this.bDay = bDay;
         this.gender = gender;
         this.address = address;
         this.emergencyContactNumber = emergencyContactNumber;
         this.email = email;
+        this.jobRole = jobRole;
+    }
+
+    public String getJobRole() {
+        return jobRole;
+    }
+
+    public void setJobRole(String jobRole) {
+        this.jobRole = jobRole;
+    }
+
+    public String getContactNo() {
+        return contactNo;
+    }
+
+    public void setContactNo(String contactNo) {
+        this.contactNo = contactNo;
+    }
+
+    public EmployeeRegistrationEntity() {
     }
 
     public long getEmployeeNumber() {
@@ -106,11 +130,11 @@ public class EmployeeRegistrationEntity {
         this.address = address;
     }
 
-    public int getEmergencyContactNumber() {
+    public String getEmergencyContactNumber() {
         return emergencyContactNumber;
     }
 
-    public void setEmergencyContactNumber(int emergencyContactNumber) {
+    public void setEmergencyContactNumber(String emergencyContactNumber) {
         this.emergencyContactNumber = emergencyContactNumber;
     }
 
