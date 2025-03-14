@@ -8,4 +8,8 @@ public interface SupplierRegistrationServiceI {
     SupplierRegistrationDto addSupplierEntity(SupplierRegistrationDto supplierRegistrationDto);
 
     List<SupplierRegistrationDto> getSupplierEntity();
+
+    SupplierRegistrationDto updateSupplierEntity(long supplierId, SupplierRegistrationDto supplierRegistrationDto);
+
+    SupplierRegistrationDto deleteSupplier(long supplierId);
 }
