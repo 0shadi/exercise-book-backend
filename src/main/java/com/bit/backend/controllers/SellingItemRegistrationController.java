@@ -1,12 +1,15 @@
 package com.bit.backend.controllers;
 
+import com.bit.backend.dtos.FormDemoDto;
 import com.bit.backend.dtos.SellingItemRegistrationDto;
 import com.bit.backend.entities.SellingItemRegistrationEntity;
 import com.bit.backend.exceptions.AppException;
 import com.bit.backend.services.SellingItemRegistrationServiceI;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.net.URI;
 import java.util.List;
@@ -19,11 +22,19 @@ public class SellingItemRegistrationController {
         this.sellingItemRegistrationServiceI = sellingItemRegistrationServiceI;
     }
 
-    @PostMapping("/selling-item-registration")
-    public ResponseEntity<SellingItemRegistrationDto> addEntity(@RequestBody SellingItemRegistrationDto sellingItemRegistrationDto) {
+    @PostMapping(value = {"/selling-item-registration"}, consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
+    public ResponseEntity<SellingItemRegistrationDto> addEntity(@RequestPart("sellingItemForm") SellingItemRegistrationDto sellingItemRegistrationDto, @RequestPart("itemImage") MultipartFile file) {
         try{
+            if (file != null && !file.isEmpty()) {
+                sellingItemRegistrationDto.setItemImage(file.getBytes());
+                sellingItemRegistrationDto.setImageName(file.getOriginalFilename());
+                sellingItemRegistrationDto.setImageType(file.getContentType());
+            } else {
+                throw new AppException("Item image file is missing", HttpStatus.BAD_REQUEST);
+            }
+
             SellingItemRegistrationDto sellingItemRegistrationResponse = sellingItemRegistrationServiceI.addSellingItemEntity(sellingItemRegistrationDto);
-            return ResponseEntity.created(URI.create("/selling-item-registration" + sellingItemRegistrationResponse.getItemId())).body(sellingItemRegistrationResponse);
+            return ResponseEntity.created(URI.create("/selling-item-registration/" + sellingItemRegistrationResponse.getItemId())).body(sellingItemRegistrationResponse);
         }
         catch(Exception e){
             throw new AppException("Request failed with error " + e, HttpStatus.INTERNAL_SERVER_ERROR);
@@ -42,8 +53,12 @@ public class SellingItemRegistrationController {
     }
 
     @PutMapping("/selling-item-registration/{itemId}")
-    public ResponseEntity<SellingItemRegistrationDto> updateSellingItemRegistrations(@RequestBody SellingItemRegistrationDto sellingItemRegistrationDto, @PathVariable long itemId){
+    public ResponseEntity<SellingItemRegistrationDto> updateSellingItemRegistrations(@PathVariable long itemId, @RequestPart("sellingItemForm") SellingItemRegistrationDto sellingItemRegistrationDto, @RequestPart("itemImage") MultipartFile file){
         try{
+            sellingItemRegistrationDto.setItemImage(file.getBytes());
+            sellingItemRegistrationDto.setImageName(file.getOriginalFilename());
+            sellingItemRegistrationDto.setImageType(file.getContentType());
+
             SellingItemRegistrationDto updatedSellingItemDto = sellingItemRegistrationServiceI.updateSellingItemEntity(sellingItemRegistrationDto,itemId);
             return ResponseEntity.ok(updatedSellingItemDto);
         }

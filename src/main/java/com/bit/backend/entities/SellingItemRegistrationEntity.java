@@ -31,8 +31,14 @@ public class SellingItemRegistrationEntity {
     @Column(name="item_description")
     private String itemDescription;
 
-    @Column(name="item_image")
+    @Column(name="item_image", columnDefinition = "LONGBLOB")
     private byte[] itemImage;
+
+    @Column(name = "image_name")
+    private String imageName;
+
+    @Column(name = "image_type")
+    private String imageType;
 
     public SellingItemRegistrationEntity() {
     }

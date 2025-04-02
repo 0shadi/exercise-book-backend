@@ -1,5 +1,7 @@
 package com.bit.backend.dtos;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 public class SellingItemRegistrationDto {
     private long itemId;
     private String itemType;
@@ -9,12 +11,17 @@ public class SellingItemRegistrationDto {
     private String itemBrand;
     private String itemName;
     private String itemDescription;
+    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     private byte[] itemImage;
+    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
+    private String imageName;
+    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
+    private String imageType;
 
     public SellingItemRegistrationDto() {
     }
 
-    public SellingItemRegistrationDto(long itemId, String itemType, String bookType, String pagesCount, String bookSize, String itemBrand, String itemName, String itemDescription, byte[] itemImage) {
+    public SellingItemRegistrationDto(long itemId, String itemType, String bookType, String pagesCount, String bookSize, String itemBrand, String itemName, String itemDescription, byte[] itemImage, String imageName, String imageType) {
         this.itemId = itemId;
         this.itemType = itemType;
         this.bookType = bookType;
@@ -24,6 +31,8 @@ public class SellingItemRegistrationDto {
         this.itemName = itemName;
         this.itemDescription = itemDescription;
         this.itemImage = itemImage;
+        this.imageName = imageName;
+        this.imageType = imageType;
     }
 
     public long getItemId() {
@@ -96,5 +105,21 @@ public class SellingItemRegistrationDto {
 
     public void setItemImage(byte[] itemImage) {
         this.itemImage = itemImage;
+    }
+
+    public String getImageName() {
+        return imageName;
+    }
+
+    public void setImageName(String imageName) {
+        this.imageName = imageName;
+    }
+
+    public String getImageType() {
+        return imageType;
+    }
+
+    public void setImageType(String imageType) {
+        this.imageType = imageType;
     }
 }
