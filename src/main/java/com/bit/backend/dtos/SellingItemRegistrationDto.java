@@ -9,8 +9,10 @@ public class SellingItemRegistrationDto {
     private String pagesCount;
     private String bookSize;
     private String itemBrand;
+    private String stationaryName;
     private String itemName;
-    private String itemDescription;
+    private String itemPrice;
+    private String itemQuantity;
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     private byte[] itemImage;
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
@@ -21,15 +23,17 @@ public class SellingItemRegistrationDto {
     public SellingItemRegistrationDto() {
     }
 
-    public SellingItemRegistrationDto(long itemId, String itemType, String bookType, String pagesCount, String bookSize, String itemBrand, String itemName, String itemDescription, byte[] itemImage, String imageName, String imageType) {
+    public SellingItemRegistrationDto(long itemId, String itemType, String bookType, String pagesCount, String bookSize, String itemBrand, String stationaryName, String itemName, String itemPrice, String itemQuantity, byte[] itemImage, String imageName, String imageType) {
         this.itemId = itemId;
         this.itemType = itemType;
         this.bookType = bookType;
         this.pagesCount = pagesCount;
         this.bookSize = bookSize;
         this.itemBrand = itemBrand;
+        this.stationaryName = stationaryName;
         this.itemName = itemName;
-        this.itemDescription = itemDescription;
+        this.itemPrice = itemPrice;
+        this.itemQuantity = itemQuantity;
         this.itemImage = itemImage;
         this.imageName = imageName;
         this.imageType = imageType;
@@ -83,6 +87,14 @@ public class SellingItemRegistrationDto {
         this.itemBrand = itemBrand;
     }
 
+    public String getStationaryName() {
+        return stationaryName;
+    }
+
+    public void setStationaryName(String stationaryName) {
+        this.stationaryName = stationaryName;
+    }
+
     public String getItemName() {
         return itemName;
     }
@@ -91,12 +103,20 @@ public class SellingItemRegistrationDto {
         this.itemName = itemName;
     }
 
-    public String getItemDescription() {
-        return itemDescription;
+    public String getItemPrice() {
+        return itemPrice;
     }
 
-    public void setItemDescription(String itemDescription) {
-        this.itemDescription = itemDescription;
+    public void setItemPrice(String itemPrice) {
+        this.itemPrice = itemPrice;
+    }
+
+    public String getItemQuantity() {
+        return itemQuantity;
+    }
+
+    public void setItemQuantity(String itemQuantity) {
+        this.itemQuantity = itemQuantity;
     }
 
     public byte[] getItemImage() {

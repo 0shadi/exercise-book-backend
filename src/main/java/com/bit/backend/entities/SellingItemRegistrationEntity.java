@@ -25,11 +25,17 @@ public class SellingItemRegistrationEntity {
     @Column(name="item_brand")
     private String itemBrand;
 
+    @Column(name="stationary_name")
+    private String stationaryName;
+
     @Column(name="item_name")
     private String itemName;
 
-    @Column(name="item_description")
-    private String itemDescription;
+    @Column(name="item_price")
+    private String itemPrice;
+
+    @Column(name="item_quantity")
+    private String itemQuantity;
 
     @Column(name="item_image", columnDefinition = "LONGBLOB")
     private byte[] itemImage;
@@ -43,16 +49,20 @@ public class SellingItemRegistrationEntity {
     public SellingItemRegistrationEntity() {
     }
 
-    public SellingItemRegistrationEntity(long itemId, String itemType, String bookType, String pagesCount, String bookSize, String itemBrand, String itemName, String itemDescription, byte[] itemImage) {
+    public SellingItemRegistrationEntity(long itemId, String itemType, String bookType, String pagesCount, String bookSize, String itemBrand, String stationaryName, String itemName, String itemPrice, String itemQuantity, byte[] itemImage, String imageName, String imageType) {
         this.itemId = itemId;
         this.itemType = itemType;
         this.bookType = bookType;
         this.pagesCount = pagesCount;
         this.bookSize = bookSize;
         this.itemBrand = itemBrand;
+        this.stationaryName = stationaryName;
         this.itemName = itemName;
-        this.itemDescription = itemDescription;
+        this.itemPrice = itemPrice;
+        this.itemQuantity = itemQuantity;
         this.itemImage = itemImage;
+        this.imageName = imageName;
+        this.imageType = imageType;
     }
 
     public long getItemId() {
@@ -103,6 +113,14 @@ public class SellingItemRegistrationEntity {
         this.itemBrand = itemBrand;
     }
 
+    public String getStationaryName() {
+        return stationaryName;
+    }
+
+    public void setStationaryName(String stationaryName) {
+        this.stationaryName = stationaryName;
+    }
+
     public String getItemName() {
         return itemName;
     }
@@ -111,12 +129,20 @@ public class SellingItemRegistrationEntity {
         this.itemName = itemName;
     }
 
-    public String getItemDescription() {
-        return itemDescription;
+    public String getItemPrice() {
+        return itemPrice;
     }
 
-    public void setItemDescription(String itemDescription) {
-        this.itemDescription = itemDescription;
+    public void setItemPrice(String itemPrice) {
+        this.itemPrice = itemPrice;
+    }
+
+    public String getItemQuantity() {
+        return itemQuantity;
+    }
+
+    public void setItemQuantity(String itemQuantity) {
+        this.itemQuantity = itemQuantity;
     }
 
     public byte[] getItemImage() {
@@ -125,5 +151,21 @@ public class SellingItemRegistrationEntity {
 
     public void setItemImage(byte[] itemImage) {
         this.itemImage = itemImage;
+    }
+
+    public String getImageName() {
+        return imageName;
+    }
+
+    public void setImageName(String imageName) {
+        this.imageName = imageName;
+    }
+
+    public String getImageType() {
+        return imageType;
+    }
+
+    public void setImageType(String imageType) {
+        this.imageType = imageType;
     }
 }
