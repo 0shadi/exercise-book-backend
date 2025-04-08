@@ -23,19 +23,24 @@ public class FormDemoEntity {
     @Column (name="email")
     private String email;
 
+    @Column (name="salary")
+    private String salary;
+
     //Constructor
     public FormDemoEntity() {
     }
 
     //Constructor
-    public FormDemoEntity(long id, String firstName, String lastName, int age, String email) {
+
+
+    public FormDemoEntity(long id, String firstName, String lastName, int age, String email, String salary) {
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
         this.age = age;
         this.email = email;
+        this.salary = salary;
     }
-
 
     //Getters and Setters
     public long getId() {
@@ -76,5 +81,13 @@ public class FormDemoEntity {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public String getSalary() {
+        return salary;
+    }
+
+    public void setSalary(String salary) {
+        this.salary = salary;
     }
 }

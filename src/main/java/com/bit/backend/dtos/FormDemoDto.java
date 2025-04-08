@@ -6,18 +6,22 @@ public class FormDemoDto {
     private String lastName;
     private String email;
     private int age;
+    private String salary;
 
     //Constructor
     public FormDemoDto() {
     }
 
     //Constructor
-    public FormDemoDto(long id, String firstName, String lastName, String email, int age) {
+
+
+    public FormDemoDto(long id, String firstName, String lastName, String email, int age, String salary) {
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
         this.age = age;
+        this.salary = salary;
     }
 
     //Getters and Setters
@@ -59,5 +63,13 @@ public class FormDemoDto {
 
     public void setAge(int age) {
         this.age = age;
+    }
+
+    public String getSalary() {
+        return salary;
+    }
+
+    public void setSalary(String salary) {
+        this.salary = salary;
     }
 }
