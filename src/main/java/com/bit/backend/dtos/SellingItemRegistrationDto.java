@@ -19,11 +19,12 @@ public class SellingItemRegistrationDto {
     private String imageName;
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     private String imageType;
+    private String imageBase64;
 
     public SellingItemRegistrationDto() {
     }
 
-    public SellingItemRegistrationDto(long itemId, String itemType, String bookType, String pagesCount, String bookSize, String itemBrand, String stationaryName, String itemName, String itemPrice, String itemQuantity, byte[] itemImage, String imageName, String imageType) {
+    public SellingItemRegistrationDto(long itemId, String itemType, String bookType, String pagesCount, String bookSize, String itemBrand, String stationaryName, String itemName, String itemPrice, String itemQuantity, byte[] itemImage, String imageName, String imageType, String imageBase64) {
         this.itemId = itemId;
         this.itemType = itemType;
         this.bookType = bookType;
@@ -37,6 +38,7 @@ public class SellingItemRegistrationDto {
         this.itemImage = itemImage;
         this.imageName = imageName;
         this.imageType = imageType;
+        this.imageBase64 = imageBase64;
     }
 
     public long getItemId() {
@@ -141,5 +143,13 @@ public class SellingItemRegistrationDto {
 
     public void setImageType(String imageType) {
         this.imageType = imageType;
+    }
+
+    public String getImageBase64() {
+        return imageBase64;
+    }
+
+    public void setImageBase64(String imageBase64) {
+        this.imageBase64 = imageBase64;
     }
 }

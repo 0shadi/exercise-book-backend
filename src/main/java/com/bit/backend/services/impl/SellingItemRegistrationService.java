@@ -10,8 +10,10 @@ import com.bit.backend.services.SellingItemRegistrationServiceI;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
+import java.util.Base64;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class SellingItemRegistrationService implements SellingItemRegistrationServiceI {
@@ -42,6 +44,15 @@ public class SellingItemRegistrationService implements SellingItemRegistrationSe
         try{
             List<SellingItemRegistrationEntity> sellingItemEntityList = sellingItemRegistrationRepository.findAll();
             List<SellingItemRegistrationDto> sellingItemDtoList=sellingItemRegistrationMapper.toSellingItemDtoList(sellingItemEntityList);
+
+            for (SellingItemRegistrationDto dto : sellingItemDtoList) {
+
+                if (dto.getItemImage() != null) {
+                    String base64Image = Base64.getEncoder().encodeToString(dto.getItemImage());
+                    dto.setImageBase64(base64Image);
+                }
+            }
+
             return sellingItemDtoList;
         }
         catch (Exception e){
