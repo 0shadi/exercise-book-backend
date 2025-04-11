@@ -1,8 +1,7 @@
 package com.bit.backend.controllers;
 
-import com.bit.backend.dtos.FormDemoDto;
+import com.bit.backend.dtos.ItemTypeDto;
 import com.bit.backend.dtos.SellingItemRegistrationDto;
-import com.bit.backend.entities.SellingItemRegistrationEntity;
 import com.bit.backend.exceptions.AppException;
 import com.bit.backend.services.SellingItemRegistrationServiceI;
 import org.springframework.http.HttpStatus;
@@ -46,6 +45,7 @@ public class SellingItemRegistrationController {
         try{
             List<SellingItemRegistrationDto> sellingItemRegistrationDtoList = sellingItemRegistrationServiceI.getSellingItemEntity();
             return ResponseEntity.ok(sellingItemRegistrationDtoList);
+
         }
         catch(Exception e){
             throw new AppException("Request failed with error " + e, HttpStatus.INTERNAL_SERVER_ERROR);
@@ -72,6 +72,17 @@ public class SellingItemRegistrationController {
         try{
             SellingItemRegistrationDto deletedSellingItemDto = sellingItemRegistrationServiceI.deleteSellingItemEntity(itemId);
             return ResponseEntity.ok(deletedSellingItemDto);
+        }
+        catch(Exception e){
+            throw new AppException("Request failed with error " + e, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @GetMapping("/selling-item-types")
+    public ResponseEntity<List<ItemTypeDto>> getItemType() {
+        try{
+            List<ItemTypeDto> itemTypeDtoList = sellingItemRegistrationServiceI.getItemType();
+            return ResponseEntity.ok(itemTypeDtoList);
         }
         catch(Exception e){
             throw new AppException("Request failed with error " + e, HttpStatus.INTERNAL_SERVER_ERROR);
