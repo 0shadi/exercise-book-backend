@@ -15,4 +15,6 @@ public interface SellingItemRegistrationServiceI {
     SellingItemRegistrationDto deleteSellingItemEntity(long itemId);
 
     List<ItemTypeDto> getItemType();
+
+    SellingItemRegistrationDto getSellingItem(long itemId);
 }

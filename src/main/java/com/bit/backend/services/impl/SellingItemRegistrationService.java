@@ -115,6 +115,28 @@ public class SellingItemRegistrationService implements SellingItemRegistrationSe
         }
     }
 
+    @Override
+    public SellingItemRegistrationDto getSellingItem(long itemId) {
+        try {
+            Optional<SellingItemRegistrationEntity> optionalEntity = sellingItemRegistrationRepository.findById(itemId);
+
+            if (!optionalEntity.isPresent()) {
+                throw new AppException("Item does not exist", HttpStatus.BAD_REQUEST);
+            }
+            SellingItemRegistrationEntity itemEntity = optionalEntity.get();
+            SellingItemRegistrationDto sellingItemRegistrationDto = sellingItemRegistrationMapper.toSellingItemRegistrationDto(itemEntity);
+
+            if (sellingItemRegistrationDto.getItemImage() != null) {
+                String base64Image = Base64.getEncoder().encodeToString(sellingItemRegistrationDto.getItemImage());
+                sellingItemRegistrationDto.setImageBase64(base64Image);
+            }
+
+            return sellingItemRegistrationDto;
+
+        } catch (Exception e) {
+            throw new AppException("Request failed with error" + e, HttpStatus.BAD_REQUEST);
+        }
+    }
 
 
 }

@@ -52,6 +52,17 @@ public class SellingItemRegistrationController {
         }
     }
 
+    @GetMapping("/get-selling-item/{itemId}")
+    public ResponseEntity<SellingItemRegistrationDto> getSellingItem(@PathVariable long itemId) {
+        try{
+            SellingItemRegistrationDto sellingItemRegistrationDto = sellingItemRegistrationServiceI.getSellingItem(itemId);
+            return ResponseEntity.ok(sellingItemRegistrationDto);
+        }
+        catch(Exception e){
+            throw new AppException("Request failed with error " + e, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
     @PutMapping("/selling-item-registration/{itemId}")
     public ResponseEntity<SellingItemRegistrationDto> updateSellingItemRegistrations(@PathVariable long itemId, @RequestPart("sellingItemForm") SellingItemRegistrationDto sellingItemRegistrationDto, @RequestPart("itemImage") MultipartFile file){
         try{
