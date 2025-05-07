@@ -2,6 +2,7 @@ package com.bit.backend.controllers;
 
 import com.bit.backend.dtos.BillingDetailsDto;
 import com.bit.backend.dtos.OrderDetailsDto;
+import com.bit.backend.dtos.OrderItemDetailsDto;
 import com.bit.backend.exceptions.AppException;
 import com.bit.backend.services.CheckoutServiceI;
 import org.springframework.http.HttpStatus;
@@ -31,11 +32,21 @@ public class CheckoutController {
         }
     }
 
+    @PostMapping("/checkout-orderItemDetails")
+    public ResponseEntity<OrderItemDetailsDto> addOrderItemDetailsEntity(@RequestBody OrderItemDetailsDto orderItemDetailsDto) {
+        try{
+            OrderItemDetailsDto orderItemDetailsDto1 =checkoutServiceI.addOrderItemDetailsEntity(orderItemDetailsDto);
+            return ResponseEntity.created(URI.create("/checkout-orderItemDetails" + orderItemDetailsDto1.getId())).body(orderItemDetailsDto1);        }
+        catch(Exception e){
+            throw new AppException("Request failed with error " + e, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
     @PostMapping("/checkout-orderDetails")
     public ResponseEntity<OrderDetailsDto> addOrderDetailsEntity(@RequestBody OrderDetailsDto orderDetailsDto) {
         try{
             OrderDetailsDto orderDetailsDto1 =checkoutServiceI.addOrderDetailsEntity(orderDetailsDto);
-            return ResponseEntity.created(URI.create("/checkout-orderDetails" + orderDetailsDto1.getOrderId())).body(orderDetailsDto1);
+            return ResponseEntity.created(URI.create("/checkout-orderDetails" + orderDetailsDto1.getId())).body(orderDetailsDto1);
         }
         catch(Exception e){
             throw new AppException("Request failed with error " + e, HttpStatus.INTERNAL_SERVER_ERROR);

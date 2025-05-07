@@ -2,21 +2,20 @@ package com.bit.backend.entities;
 
 import jakarta.persistence.*;
 
+import java.time.LocalDate;
+
 @Entity
 @Table(name="order-details")
 public class OrderDetailsEntity {
     @Id
     @GeneratedValue(strategy= GenerationType.IDENTITY)
-    private long orderId;
+    private long id;
 
-    @Column(name="item_id")
-    private String itemId;
+    @Column(name="order_id")
+    private String orderId;
 
-    @Column(name="item_name")
-    private String itemName;
-
-    @Column(name="ord_qty")
-    private String ordQty;
+    @Column(name="date")
+    private LocalDate date;
 
     @Column(name="total_cost")
     private String totalCost;
@@ -27,45 +26,36 @@ public class OrderDetailsEntity {
     public OrderDetailsEntity() {
     }
 
-    public OrderDetailsEntity(long orderId, String itemId, String itemName, String ordQty, String totalCost, String paymentMethod) {
+    public OrderDetailsEntity(long id, String orderId, LocalDate date, String totalCost, String paymentMethod) {
+        this.id = id;
         this.orderId = orderId;
-        this.itemId = itemId;
-        this.itemName = itemName;
-        this.ordQty = ordQty;
+        this.date = date;
         this.totalCost = totalCost;
         this.paymentMethod = paymentMethod;
     }
 
-    public long getOrderId() {
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
+    }
+
+    public String getOrderId() {
         return orderId;
     }
 
-    public void setOrderId(long orderId) {
+    public void setOrderId(String orderId) {
         this.orderId = orderId;
     }
 
-    public String getItemId() {
-        return itemId;
+    public LocalDate getDate() {
+        return date;
     }
 
-    public void setItemId(String itemId) {
-        this.itemId = itemId;
-    }
-
-    public String getItemName() {
-        return itemName;
-    }
-
-    public void setItemName(String itemName) {
-        this.itemName = itemName;
-    }
-
-    public String getOrdQty() {
-        return ordQty;
-    }
-
-    public void setOrdQty(String ordQty) {
-        this.ordQty = ordQty;
+    public void setDate(LocalDate date) {
+        this.date = date;
     }
 
     public String getTotalCost() {
