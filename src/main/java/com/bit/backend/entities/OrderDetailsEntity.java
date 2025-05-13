@@ -23,15 +23,19 @@ public class OrderDetailsEntity {
     @Column(name="payment_method")
     private String paymentMethod;
 
+    @Column(name="order_status")
+    private String orderStatus;
+
     public OrderDetailsEntity() {
     }
 
-    public OrderDetailsEntity(long id, String orderId, LocalDate date, String totalCost, String paymentMethod) {
+    public OrderDetailsEntity(long id, String orderId, LocalDate date, String totalCost, String paymentMethod, String orderStatus) {
         this.id = id;
         this.orderId = orderId;
         this.date = date;
         this.totalCost = totalCost;
         this.paymentMethod = paymentMethod;
+        this.orderStatus = orderStatus;
     }
 
     public long getId() {
@@ -72,5 +76,13 @@ public class OrderDetailsEntity {
 
     public void setPaymentMethod(String paymentMethod) {
         this.paymentMethod = paymentMethod;
+    }
+
+    public String getOrderStatus() {
+        return orderStatus;
+    }
+
+    public void setOrderStatus(String orderStatus) {
+        this.orderStatus = orderStatus;
     }
 }

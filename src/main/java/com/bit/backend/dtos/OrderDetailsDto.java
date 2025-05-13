@@ -8,16 +8,18 @@ public class OrderDetailsDto {
     private LocalDate date;
     private String totalCost;
     private String paymentMethod;
+    private String orderStatus;
 
     public OrderDetailsDto() {
     }
 
-    public OrderDetailsDto(long id, long orderId, LocalDate date, String totalCost, String paymentMethod) {
+    public OrderDetailsDto(long id, long orderId, LocalDate date, String totalCost, String paymentMethod, String orderStatus) {
         this.id = id;
         this.orderId = orderId;
         this.date = date;
         this.totalCost = totalCost;
         this.paymentMethod = paymentMethod;
+        this.orderStatus = orderStatus;
     }
 
     public long getId() {
@@ -58,5 +60,13 @@ public class OrderDetailsDto {
 
     public void setPaymentMethod(String paymentMethod) {
         this.paymentMethod = paymentMethod;
+    }
+
+    public String getOrderStatus() {
+        return orderStatus;
+    }
+
+    public void setOrderStatus(String orderStatus) {
+        this.orderStatus = orderStatus;
     }
 }
