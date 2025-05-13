@@ -1,11 +1,7 @@
 package com.bit.backend.services.impl;
 
-import com.bit.backend.dtos.BillingDetailsDto;
-import com.bit.backend.dtos.OrderDetailsDto;
-import com.bit.backend.dtos.OrderItemDetailsDto;
-import com.bit.backend.entities.BillingDetailsEntity;
-import com.bit.backend.entities.OrderDetailsEntity;
-import com.bit.backend.entities.OrderItemDetailsEntity;
+import com.bit.backend.dtos.*;
+import com.bit.backend.entities.*;
 import com.bit.backend.exceptions.AppException;
 import com.bit.backend.mappers.BillingDetailsMapper;
 import com.bit.backend.mappers.OrderDetailsMapper;
@@ -16,6 +12,9 @@ import com.bit.backend.repositories.OrderItemDetailsRepository;
 import com.bit.backend.services.CheckoutServiceI;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
+import java.util.Optional;
 
 @Service
 public class CheckoutService implements CheckoutServiceI {
@@ -70,4 +69,34 @@ public class CheckoutService implements CheckoutServiceI {
         catch (Exception e){
             throw new AppException("Request failed with error" +e, HttpStatus.BAD_REQUEST);
         }}
+
+    @Override
+    public List<OrderDetailsDto> getOderDetailsEntity() {
+        try{
+            List<OrderDetailsEntity> orderEntityList =orderDetailsRepository.findAll();
+            List<OrderDetailsDto> orderDtoList=orderDetailsMapper.toOrderDetailsDtoList(orderEntityList);
+            return orderDtoList;
+        }
+        catch (Exception e){
+            throw new AppException("Request failed with error" +e, HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @Override
+    public List<OrderItemDetailsDto> getOrderItem(long orderId) {
+        try {
+            Optional<List<OrderItemDetailsEntity>> optionalEntity = orderItemDetailsRepository.findByOrderId(orderId);
+
+            if (!optionalEntity.isPresent()) {
+                throw new AppException("Item does not exist", HttpStatus.BAD_REQUEST);
+            }
+            List<OrderItemDetailsEntity> itemEntity = optionalEntity.get();
+            List<OrderItemDetailsDto> orderItemDetailsDto = orderItemDetailsMapper.toOrderItemDetailsDtoList(itemEntity);
+
+            return orderItemDetailsDto;
+
+        } catch (Exception e) {
+            throw new AppException("Request failed with error" + e, HttpStatus.BAD_REQUEST);
+        }
+    }
 }
