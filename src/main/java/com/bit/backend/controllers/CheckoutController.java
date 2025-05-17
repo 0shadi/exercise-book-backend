@@ -2,6 +2,7 @@ package com.bit.backend.controllers;
 
 import com.bit.backend.dtos.*;
 import com.bit.backend.exceptions.AppException;
+import com.bit.backend.repositories.OrderDetailsRepository;
 import com.bit.backend.services.CheckoutServiceI;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -13,9 +14,11 @@ import java.util.List;
 @RestController
 public class CheckoutController {
     private final CheckoutServiceI checkoutServiceI;
+    private final OrderDetailsRepository orderDetailsRepository;
 
-    public CheckoutController(CheckoutServiceI checkoutServiceI) {
+    public CheckoutController(CheckoutServiceI checkoutServiceI, OrderDetailsRepository orderDetailsRepository) {
         this.checkoutServiceI = checkoutServiceI;
+        this.orderDetailsRepository = orderDetailsRepository;
     }
 
     @PostMapping("/checkout-billingDetails")
@@ -67,6 +70,16 @@ public class CheckoutController {
             return ResponseEntity.ok(orderItemDetailsDto);
         }
         catch(Exception e){
+            throw new AppException("Request failed with error " + e, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @PutMapping("/update-status/{orderId}")
+    public ResponseEntity<OrderDetailsDto> updateOrderStatus(@PathVariable long orderId, @RequestBody OrderDetailsDto orderStatus){
+        try{
+            OrderDetailsDto  updatedOrderStatus=checkoutServiceI.updateOrderStatus(orderId,orderStatus);
+            return ResponseEntity.ok(updatedOrderStatus);
+        }catch (Exception e){
             throw new AppException("Request failed with error " + e, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }

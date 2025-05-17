@@ -12,7 +12,7 @@ public class OrderDetailsEntity {
     private long id;
 
     @Column(name="order_id")
-    private String orderId;
+    private long orderId;
 
     @Column(name="date")
     private LocalDate date;
@@ -29,7 +29,7 @@ public class OrderDetailsEntity {
     public OrderDetailsEntity() {
     }
 
-    public OrderDetailsEntity(long id, String orderId, LocalDate date, String totalCost, String paymentMethod, String orderStatus) {
+    public OrderDetailsEntity(long id, long orderId, LocalDate date, String totalCost, String paymentMethod, String orderStatus) {
         this.id = id;
         this.orderId = orderId;
         this.date = date;
@@ -46,11 +46,11 @@ public class OrderDetailsEntity {
         this.id = id;
     }
 
-    public String getOrderId() {
+    public long getOrderId() {
         return orderId;
     }
 
-    public void setOrderId(String orderId) {
+    public void setOrderId(long orderId) {
         this.orderId = orderId;
     }
 

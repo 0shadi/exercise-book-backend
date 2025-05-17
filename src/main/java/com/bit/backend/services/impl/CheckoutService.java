@@ -99,4 +99,25 @@ public class CheckoutService implements CheckoutServiceI {
             throw new AppException("Request failed with error" + e, HttpStatus.BAD_REQUEST);
         }
     }
+
+    @Override
+    public OrderDetailsDto updateOrderStatus(long orderId, OrderDetailsDto orderStatus) {
+        try{
+            Optional<OrderDetailsEntity> optionalEntity=orderDetailsRepository.findByOrderId(orderId);
+
+            if(!optionalEntity.isPresent()){
+                throw new AppException("Item does not exist", HttpStatus.BAD_REQUEST);
+            }
+
+            OrderDetailsEntity newEntity = optionalEntity.get();
+            newEntity.setOrderStatus(orderStatus.getOrderStatus());
+
+            OrderDetailsEntity updatedEntity =orderDetailsRepository.save(newEntity);
+            return orderDetailsMapper.toOrderDetailsDto(updatedEntity);
+        }
+        catch (Exception e){
+            throw new AppException("Request failed with error" +e, HttpStatus.BAD_REQUEST);
+        }
+    }
 }
+

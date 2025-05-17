@@ -16,4 +16,6 @@ public interface CheckoutServiceI {
     List<OrderDetailsDto> getOderDetailsEntity();
 
     List<OrderItemDetailsDto> getOrderItem(long orderId);
+
+    OrderDetailsDto updateOrderStatus(long orderId, OrderDetailsDto orderStatus);
 }
