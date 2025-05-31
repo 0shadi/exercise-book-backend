@@ -1,21 +1,16 @@
 package com.bit.backend.controllers;
 
-import com.bit.backend.dtos.CustomizedBillingDetailsDto;
-import com.bit.backend.dtos.CustomizedBookDetailsDto;
-import com.bit.backend.dtos.CustomizedOrderDetailsDto;
-import com.bit.backend.dtos.SellingItemRegistrationDto;
+import com.bit.backend.dtos.*;
 import com.bit.backend.exceptions.AppException;
 import com.bit.backend.services.CustomizedOrderServiceI;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestPart;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.net.URI;
+import java.util.List;
 
 @RestController
 public class CustomizedOrderController {
@@ -60,6 +55,37 @@ public class CustomizedOrderController {
             return ResponseEntity.created(URI.create("/customization-billingDetails" + billingDetailsDto.getId())).body(billingDetailsDto);
         }
         catch(Exception e){
+            throw new AppException("Request failed with error " + e, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @GetMapping("/get-customized-order-details")
+    public ResponseEntity<List<CustomizedOrderDetailsDto>> getCustomizedOrderList(){
+        try{
+            List<CustomizedOrderDetailsDto> customizedOrderDetailsList=customizedOrderServiceI.getCustomizedOderDetailsEntity();
+            return ResponseEntity.ok (customizedOrderDetailsList);
+        }catch (Exception e){
+            throw new AppException("Request failed with error " + e, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @GetMapping("/get-customized-book-details/{orderId}")
+    public ResponseEntity<List<CustomizedBookDetailsDto>> getCustomizedBookDetails(@PathVariable long orderId) {
+        try{
+            List<CustomizedBookDetailsDto> customizedBookDetailsDtos = customizedOrderServiceI.getCustomizedBookDetails(orderId);
+            return ResponseEntity.ok(customizedBookDetailsDtos);
+        }
+        catch(Exception e){
+            throw new AppException("Request failed with error " + e, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @PutMapping("/update-order-status/{orderId}")
+    public ResponseEntity<CustomizedOrderDetailsDto> updateOrderStatus(@PathVariable long orderId, @RequestBody CustomizedOrderDetailsDto orderStatus){
+        try{
+            CustomizedOrderDetailsDto  updatedOrderStatus=customizedOrderServiceI.updateOrderStatus(orderId,orderStatus);
+            return ResponseEntity.ok(updatedOrderStatus);
+        }catch (Exception e){
             throw new AppException("Request failed with error " + e, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
