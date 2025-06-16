@@ -9,17 +9,19 @@ public class OrderDetailsDto {
     private String totalCost;
     private String paymentMethod;
     private String orderStatus;
+    private String customerId;
 
     public OrderDetailsDto() {
     }
 
-    public OrderDetailsDto(long id, long orderId, LocalDate date, String totalCost, String paymentMethod, String orderStatus) {
+    public OrderDetailsDto(long id, long orderId, LocalDate date, String totalCost, String paymentMethod, String orderStatus, String customerId) {
         this.id = id;
         this.orderId = orderId;
         this.date = date;
         this.totalCost = totalCost;
         this.paymentMethod = paymentMethod;
         this.orderStatus = orderStatus;
+        this.customerId = customerId;
     }
 
     public long getId() {
@@ -68,5 +70,13 @@ public class OrderDetailsDto {
 
     public void setOrderStatus(String orderStatus) {
         this.orderStatus = orderStatus;
+    }
+
+    public String getCustomerId() {
+        return customerId;
+    }
+
+    public void setCustomerId(String customerId) {
+        this.customerId = customerId;
     }
 }
