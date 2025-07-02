@@ -31,10 +31,13 @@ public class ItemRegistrationEntity {
     @Column(name="supplier")
     private String supplier;
 
+    @Column(name="item_category")
+    private String itemCategory;
+
     public ItemRegistrationEntity() {
     }
 
-    public ItemRegistrationEntity(long itemId, String itemCode, String itemName, String itemType, String elementType, String itemBrand, String description, String supplier) {
+    public ItemRegistrationEntity(long itemId, String itemCode, String itemName, String itemType, String elementType, String itemBrand, String description, String supplier, String itemCategory) {
         this.itemId = itemId;
         this.itemCode = itemCode;
         this.itemName = itemName;
@@ -43,6 +46,15 @@ public class ItemRegistrationEntity {
         this.itemBrand = itemBrand;
         this.description = description;
         this.supplier = supplier;
+        this.itemCategory = itemCategory;
+    }
+
+    public String getItemCategory() {
+        return itemCategory;
+    }
+
+    public void setItemCategory(String itemCategory) {
+        this.itemCategory = itemCategory;
     }
 
     public long getItemId() {

@@ -8,12 +8,13 @@ public class ItemRegistrationDto {
     private String elementType;
     private String itemBrand;
     private String description;
+    private String itemCategory;
     private String supplier;
 
     public ItemRegistrationDto() {
     }
 
-    public ItemRegistrationDto(long itemId, String itemCode, String itemName, String itemType, String elementType, String itemBrand, String description, String supplier) {
+    public ItemRegistrationDto(long itemId, String itemCode, String itemName, String itemType, String elementType, String itemBrand, String description, String itemCategory, String supplier) {
         this.itemId = itemId;
         this.itemCode = itemCode;
         this.itemName = itemName;
@@ -21,7 +22,16 @@ public class ItemRegistrationDto {
         this.elementType = elementType;
         this.itemBrand = itemBrand;
         this.description = description;
+        this.itemCategory = itemCategory;
         this.supplier = supplier;
+    }
+
+    public String getItemCategory() {
+        return itemCategory;
+    }
+
+    public void setItemCategory(String itemCategory) {
+        this.itemCategory = itemCategory;
     }
 
     public long getItemId() {
