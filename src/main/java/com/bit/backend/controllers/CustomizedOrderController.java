@@ -89,4 +89,15 @@ public class CustomizedOrderController {
             throw new AppException("Request failed with error " + e, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+
+    @PostMapping("/customization-cardDetails")
+    public ResponseEntity<CustomizationPaymentDetailsDto> addCustomizationPaymentDetailsEntity(@RequestBody CustomizationPaymentDetailsDto customizationPaymentDetailsDto) {
+        try{
+            CustomizationPaymentDetailsDto customizationPaymentDetailsDto1 =customizedOrderServiceI.addCustomizationPaymentDetailsEntity(customizationPaymentDetailsDto);
+            return ResponseEntity.created(URI.create("/customization-cardDetails" + customizationPaymentDetailsDto1.getId())).body(customizationPaymentDetailsDto1);
+        }
+        catch(Exception e){
+            throw new AppException("Request failed with error " + e, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
 }

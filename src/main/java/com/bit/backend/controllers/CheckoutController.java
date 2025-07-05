@@ -83,4 +83,15 @@ public class CheckoutController {
             throw new AppException("Request failed with error " + e, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+
+    @PostMapping("/checkout-cardDetails")
+    public ResponseEntity<OrderPaymentDetailsDto> addOrderPaymentDetailsEntity(@RequestBody OrderPaymentDetailsDto orderPaymentDetailsDto) {
+        try{
+            OrderPaymentDetailsDto orderPaymentDetailsDto1 =checkoutServiceI.addOrderPaymentDetailsEntity(orderPaymentDetailsDto);
+            return ResponseEntity.created(URI.create("/checkout-cardDetails" + orderPaymentDetailsDto1.getId())).body(orderPaymentDetailsDto1);
+        }
+        catch(Exception e){
+            throw new AppException("Request failed with error " + e, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
 }

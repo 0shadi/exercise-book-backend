@@ -1,5 +1,6 @@
 package com.bit.backend.services;
 
+import com.bit.backend.dtos.CustomizationPaymentDetailsDto;
 import com.bit.backend.dtos.CustomizedBillingDetailsDto;
 import com.bit.backend.dtos.CustomizedBookDetailsDto;
 import com.bit.backend.dtos.CustomizedOrderDetailsDto;
@@ -18,4 +19,6 @@ public interface CustomizedOrderServiceI {
     List<CustomizedBookDetailsDto> getCustomizedBookDetails(long orderId);
 
     CustomizedOrderDetailsDto updateOrderStatus(long orderId, CustomizedOrderDetailsDto orderStatus);
+
+    CustomizationPaymentDetailsDto addCustomizationPaymentDetailsEntity(CustomizationPaymentDetailsDto customizationPaymentDetailsDto);
 }

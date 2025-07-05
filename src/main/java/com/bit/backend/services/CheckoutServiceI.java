@@ -3,6 +3,7 @@ package com.bit.backend.services;
 import com.bit.backend.dtos.BillingDetailsDto;
 import com.bit.backend.dtos.OrderDetailsDto;
 import com.bit.backend.dtos.OrderItemDetailsDto;
+import com.bit.backend.dtos.OrderPaymentDetailsDto;
 
 import java.util.List;
 
@@ -18,4 +19,6 @@ public interface CheckoutServiceI {
     List<OrderItemDetailsDto> getOrderItem(long orderId);
 
     OrderDetailsDto updateOrderStatus(long orderId, OrderDetailsDto orderStatus);
+
+    OrderPaymentDetailsDto addOrderPaymentDetailsEntity(OrderPaymentDetailsDto orderPaymentDetailsDto);
 }

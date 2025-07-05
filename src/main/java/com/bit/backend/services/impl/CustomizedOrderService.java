@@ -3,9 +3,11 @@ package com.bit.backend.services.impl;
 import com.bit.backend.dtos.*;
 import com.bit.backend.entities.*;
 import com.bit.backend.exceptions.AppException;
+import com.bit.backend.mappers.CustomizationPaymentDetailsMapper;
 import com.bit.backend.mappers.CustomizedBillingDetailsMapper;
 import com.bit.backend.mappers.CustomizedBookDetailsMapper;
 import com.bit.backend.mappers.CustomizedOrderDetailsMapper;
+import com.bit.backend.repositories.CustomizationPaymentDetailsRepository;
 import com.bit.backend.repositories.CustomizedBillingDetailsRepository;
 import com.bit.backend.repositories.CustomizedBookDetailsRepository;
 import com.bit.backend.repositories.CustomizedOrderDetailsRepository;
@@ -26,14 +28,18 @@ public class CustomizedOrderService implements CustomizedOrderServiceI {
 
     private final CustomizedBillingDetailsRepository customizedBillingDetailsRepository;
     private final CustomizedBillingDetailsMapper customizedBillingDetailsMapper;
+    private final CustomizationPaymentDetailsMapper customizationPaymentDetailsMapper;
+    private final CustomizationPaymentDetailsRepository customizationPaymentDetailsRepository;
 
-    public CustomizedOrderService(CustomizedOrderDetailsRepository customizedOrderDetailsRepository, CustomizedOrderDetailsMapper customizedOrderDetailsMapper, CustomizedBookDetailsRepository customizedBookDetailsRepository, CustomizedBookDetailsMapper customizedBookDetailsMapper, CustomizedBillingDetailsRepository customizedBillingDetailsRepository, CustomizedBillingDetailsMapper customizedBillingDetailsMapper) {
+    public CustomizedOrderService(CustomizedOrderDetailsRepository customizedOrderDetailsRepository, CustomizedOrderDetailsMapper customizedOrderDetailsMapper, CustomizedBookDetailsRepository customizedBookDetailsRepository, CustomizedBookDetailsMapper customizedBookDetailsMapper, CustomizedBillingDetailsRepository customizedBillingDetailsRepository, CustomizedBillingDetailsMapper customizedBillingDetailsMapper, CustomizationPaymentDetailsMapper customizationPaymentDetailsMapper, CustomizationPaymentDetailsRepository customizationPaymentDetailsRepository) {
         this.customizedOrderDetailsRepository = customizedOrderDetailsRepository;
         this.customizedOrderDetailsMapper = customizedOrderDetailsMapper;
         this.customizedBookDetailsRepository = customizedBookDetailsRepository;
         this.customizedBookDetailsMapper = customizedBookDetailsMapper;
         this.customizedBillingDetailsRepository = customizedBillingDetailsRepository;
         this.customizedBillingDetailsMapper = customizedBillingDetailsMapper;
+        this.customizationPaymentDetailsMapper = customizationPaymentDetailsMapper;
+        this.customizationPaymentDetailsRepository = customizationPaymentDetailsRepository;
     }
 
     @Override
@@ -119,6 +125,19 @@ public class CustomizedOrderService implements CustomizedOrderServiceI {
 
             CustomizedOrderDetailsEntity updatedEntity =customizedOrderDetailsRepository.save(newEntity);
             return customizedOrderDetailsMapper.toCustomizedOrderDetailsDto(updatedEntity);
+        }
+        catch (Exception e){
+            throw new AppException("Request failed with error" +e, HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @Override
+    public CustomizationPaymentDetailsDto addCustomizationPaymentDetailsEntity(CustomizationPaymentDetailsDto customizationPaymentDetailsDto) {
+        try{
+            CustomizationPaymentDetailsEntity customizationPaymentDetailsEntity=customizationPaymentDetailsMapper.toCustomizationPaymentDetailsEntity(customizationPaymentDetailsDto);
+            CustomizationPaymentDetailsEntity saveCustomizationPaymentEntity=customizationPaymentDetailsRepository.save(customizationPaymentDetailsEntity);
+            CustomizationPaymentDetailsDto savedCustomizationPaymentDto=customizationPaymentDetailsMapper.toCustomizationPaymentDetailsDto(saveCustomizationPaymentEntity);
+            return savedCustomizationPaymentDto;
         }
         catch (Exception e){
             throw new AppException("Request failed with error" +e, HttpStatus.BAD_REQUEST);

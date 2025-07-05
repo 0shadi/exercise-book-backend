@@ -6,9 +6,11 @@ import com.bit.backend.exceptions.AppException;
 import com.bit.backend.mappers.BillingDetailsMapper;
 import com.bit.backend.mappers.OrderDetailsMapper;
 import com.bit.backend.mappers.OrderItemDetailsMapper;
+import com.bit.backend.mappers.OrderPaymentDetailsMapper;
 import com.bit.backend.repositories.BillingDetailsRepository;
 import com.bit.backend.repositories.OrderDetailsRepository;
 import com.bit.backend.repositories.OrderItemDetailsRepository;
+import com.bit.backend.repositories.OrderPaymentDetailsRepository;
 import com.bit.backend.services.CheckoutServiceI;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -24,15 +26,20 @@ public class CheckoutService implements CheckoutServiceI {
     private final OrderDetailsMapper orderDetailsMapper;
     private final OrderItemDetailsRepository orderItemDetailsRepository;
     private final OrderItemDetailsMapper orderItemDetailsMapper;
+    private final OrderPaymentDetailsRepository orderPaymentDetailsRepository;
+    private final OrderPaymentDetailsMapper orderPaymentDetailsMapper;
 
-    public CheckoutService(BillingDetailsRepository billingDetailsRepository, BillingDetailsMapper billingDetailsMapper, OrderDetailsRepository orderDetailsRepository, OrderDetailsMapper orderDetailsMapper, OrderItemDetailsRepository orderItemDetailsRepository, OrderItemDetailsMapper orderItemDetailsMapper) {
+    public CheckoutService(BillingDetailsRepository billingDetailsRepository, BillingDetailsMapper billingDetailsMapper, OrderDetailsRepository orderDetailsRepository, OrderDetailsMapper orderDetailsMapper, OrderItemDetailsRepository orderItemDetailsRepository, OrderItemDetailsMapper orderItemDetailsMapper, OrderPaymentDetailsRepository orderPaymentDetailsRepository, OrderPaymentDetailsMapper orderPaymentDetailsMapper) {
         this.billingDetailsRepository = billingDetailsRepository;
         this.billingDetailsMapper = billingDetailsMapper;
         this.orderDetailsRepository = orderDetailsRepository;
         this.orderDetailsMapper = orderDetailsMapper;
         this.orderItemDetailsRepository = orderItemDetailsRepository;
         this.orderItemDetailsMapper = orderItemDetailsMapper;
+        this.orderPaymentDetailsRepository = orderPaymentDetailsRepository;
+        this.orderPaymentDetailsMapper = orderPaymentDetailsMapper;
     }
+
 
     @Override
     public BillingDetailsDto addBillingDetailsEntity(BillingDetailsDto billingDetailsDto) {
@@ -114,6 +121,19 @@ public class CheckoutService implements CheckoutServiceI {
 
             OrderDetailsEntity updatedEntity =orderDetailsRepository.save(newEntity);
             return orderDetailsMapper.toOrderDetailsDto(updatedEntity);
+        }
+        catch (Exception e){
+            throw new AppException("Request failed with error" +e, HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @Override
+    public OrderPaymentDetailsDto addOrderPaymentDetailsEntity(OrderPaymentDetailsDto orderPaymentDetailsDto) {
+        try{
+            OrderPaymentDetailsEntity orderPaymentDetailsEntity=orderPaymentDetailsMapper.toOrderPaymentDetailsEntity(orderPaymentDetailsDto);
+            OrderPaymentDetailsEntity savedOrderPaymentEntity=orderPaymentDetailsRepository.save(orderPaymentDetailsEntity);
+            OrderPaymentDetailsDto savedOrderPaymentDto=orderPaymentDetailsMapper.toOrderPaymentDetailsDto(savedOrderPaymentEntity);
+            return savedOrderPaymentDto;
         }
         catch (Exception e){
             throw new AppException("Request failed with error" +e, HttpStatus.BAD_REQUEST);
