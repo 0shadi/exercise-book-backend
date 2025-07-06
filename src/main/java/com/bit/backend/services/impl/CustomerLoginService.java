@@ -1,7 +1,9 @@
 package com.bit.backend.services.impl;
 
 import com.bit.backend.dtos.CustomerLoginDto;
+import com.bit.backend.dtos.EmployeeLoginDto;
 import com.bit.backend.entities.CustomerLoginEntity;
+import com.bit.backend.entities.EmployeeLoginEntity;
 import com.bit.backend.exceptions.AppException;
 import com.bit.backend.mappers.CustomerLoginMapper;
 import com.bit.backend.repositories.CustomerLoginRepository;
@@ -10,6 +12,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class CustomerLoginService implements CustomerLoginServiceI {
@@ -45,4 +48,43 @@ public class CustomerLoginService implements CustomerLoginServiceI {
             throw new AppException("Request failed with error" +e, HttpStatus.BAD_REQUEST);
         }
     }
+
+    @Override
+    public CustomerLoginDto updateCustomer(long id, CustomerLoginDto customerLoginDto) {
+        try{
+            Optional<CustomerLoginEntity> OptionalCustomerEntity=customerLoginRepository.findById(id);
+
+            if(!OptionalCustomerEntity.isPresent()){
+                throw new AppException("Customer does not exist", HttpStatus.BAD_REQUEST);
+            }
+
+            CustomerLoginEntity newCustomerEntity=customerLoginMapper.toCustomerLoginEntity(customerLoginDto);
+            newCustomerEntity.setId(id);//To set the customerNumber of the newEntity
+            CustomerLoginEntity savedEntity=customerLoginRepository.save(newCustomerEntity);
+            CustomerLoginDto updatedDto=customerLoginMapper.toCustomerLoginDto(savedEntity);
+
+            return updatedDto;
+        }catch (Exception e){
+            throw new AppException("Request failed with error" +e, HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @Override
+    public CustomerLoginDto deleteCustomer(long id) {
+        try{
+            Optional<CustomerLoginEntity> OptionalCustomerEntity=customerLoginRepository.findById(id);
+
+            if(!OptionalCustomerEntity.isPresent()){
+                throw new AppException("Customer does not exist", HttpStatus.BAD_REQUEST);
+            }
+
+            customerLoginRepository.deleteById(id);
+
+            return customerLoginMapper.toCustomerLoginDto(OptionalCustomerEntity.get());
+        }
+        catch (Exception e){
+            throw new AppException("Request failed with error" +e, HttpStatus.BAD_REQUEST);
+        }
+    }
 }
+

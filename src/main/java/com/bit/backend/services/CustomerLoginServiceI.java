@@ -8,4 +8,8 @@ public interface CustomerLoginServiceI {
     CustomerLoginDto addCustomerLoginEntity(CustomerLoginDto customerLoginDto);
 
     List<CustomerLoginDto> getCustomerLoginEntity();
+
+    CustomerLoginDto updateCustomer(long id, CustomerLoginDto customerLoginDto);
+
+    CustomerLoginDto deleteCustomer(long id);
 }

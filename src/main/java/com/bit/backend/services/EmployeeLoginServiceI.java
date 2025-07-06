@@ -8,4 +8,8 @@ public interface EmployeeLoginServiceI {
     EmployeeLoginDto addEmployeeLoginEntity(EmployeeLoginDto employeeLoginDto);
 
     List<EmployeeLoginDto> getEmployeeLoginEntity();
+
+    EmployeeLoginDto updateEmployee(long id, EmployeeLoginDto employeeLoginDto);
+
+    EmployeeLoginDto deleteEmployee(long id);
 }

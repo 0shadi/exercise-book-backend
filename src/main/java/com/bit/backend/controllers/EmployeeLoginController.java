@@ -8,10 +8,7 @@ import com.bit.backend.services.EmployeeLoginServiceI;
 import com.bit.backend.services.impl.EmployeeLoginService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
 import java.util.List;
@@ -40,6 +37,26 @@ public class EmployeeLoginController {
         try{
             List<EmployeeLoginDto> employeeLoginList=employeeLoginServiceI.getEmployeeLoginEntity();
             return ResponseEntity.ok (employeeLoginList);
+        }catch (Exception e){
+            throw new AppException("Request failed with error " + e, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @PutMapping("/employee-login/{id}")
+    public ResponseEntity<EmployeeLoginDto> updateEmployee(@PathVariable long id, @RequestBody EmployeeLoginDto employeeLoginDto){
+        try{
+            EmployeeLoginDto  updatedEmployee=employeeLoginServiceI.updateEmployee(id,employeeLoginDto);
+            return ResponseEntity.ok(updatedEmployee);
+        }catch (Exception e){
+            throw new AppException("Request failed with error " + e, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @DeleteMapping("/employee-login/{id}")
+    public ResponseEntity<EmployeeLoginDto> deleteEmployee(@PathVariable long id){
+        try{
+            EmployeeLoginDto  deletedEmployee=employeeLoginServiceI.deleteEmployee(id);
+            return ResponseEntity.ok(deletedEmployee);
         }catch (Exception e){
             throw new AppException("Request failed with error " + e, HttpStatus.INTERNAL_SERVER_ERROR);
         }
