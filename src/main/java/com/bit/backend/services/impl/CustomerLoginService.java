@@ -60,6 +60,7 @@ public class CustomerLoginService implements CustomerLoginServiceI {
 
             CustomerLoginEntity newCustomerEntity=customerLoginMapper.toCustomerLoginEntity(customerLoginDto);
             newCustomerEntity.setId(id);//To set the customerNumber of the newEntity
+            newCustomerEntity.setUserId(OptionalCustomerEntity.get().getUserId());
             CustomerLoginEntity savedEntity=customerLoginRepository.save(newCustomerEntity);
             CustomerLoginDto updatedDto=customerLoginMapper.toCustomerLoginDto(savedEntity);
 

@@ -10,4 +10,6 @@ public interface UserServiceI {
     List<Integer> getAuthIds(long userId);
     SystemPrivilegeListDto getSystemPrivileges();
     List<Integer> setSystemPrivileges(SystemPrivilegeListDto systemPrivilegeListDto);
+    boolean updateUser(SignUpDto signUpDto, Long userId);
+    boolean checkIfUserNameExist(String login);
 }

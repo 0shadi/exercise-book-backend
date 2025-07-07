@@ -21,15 +21,19 @@ public class CustomerLoginEntity {
     @Column(name="password")
     private String password;
 
+    @Column(name = "userId")
+    private Long userId;
+
     public CustomerLoginEntity() {
     }
 
-    public CustomerLoginEntity(Long id, String firstName, String lastName, String userName, String password) {
+    public CustomerLoginEntity(Long id, String firstName, String lastName, String userName, String password, Long userId) {
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
         this.userName = userName;
         this.password = password;
+        this.userId = userId;
     }
 
     public String getFirstName() {
@@ -70,5 +74,13 @@ public class CustomerLoginEntity {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public Long getUserId() {
+        return userId;
+    }
+
+    public void setUserId(Long userId) {
+        this.userId = userId;
     }
 }

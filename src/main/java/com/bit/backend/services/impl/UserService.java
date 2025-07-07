@@ -97,4 +97,39 @@ public class UserService implements UserServiceI {
 
         return null;
     }
+
+    @Override
+    public boolean updateUser(SignUpDto signUpDto, Long userId) {
+        return this.updateUserProcess(signUpDto, userId);
+    }
+
+    @Override
+    public boolean checkIfUserNameExist(String login) {
+        Optional<User> user = userRepository.findByLogin(login);
+
+        if (user.isPresent()) {
+            return true;
+        }
+        return false;
+    }
+
+    public boolean updateUserProcess(SignUpDto signUpDto, Long userId) {
+        User user = userRepository.findById(
+                userId).orElseThrow(() -> new AppException("Unknown User", HttpStatus.NOT_FOUND));
+        try {
+            user.setFirstName(signUpDto.firstName());
+            user.setLastName(signUpDto.lastName());
+            user.setLogin(signUpDto.login());
+
+            if (signUpDto.password().length > 0) {
+                if (!passwordEncoder.matches(CharBuffer.wrap(signUpDto.password()), user.getPassword())) {
+                    user.setPassword(passwordEncoder.encode(CharBuffer.wrap(signUpDto.password())));
+                }
+            }
+            userRepository.save(user);
+            return true;
+        } catch(Exception e) {
+            throw new AppException("Error occurred! Please try again", HttpStatus.BAD_REQUEST);
+        }
+    }
 }

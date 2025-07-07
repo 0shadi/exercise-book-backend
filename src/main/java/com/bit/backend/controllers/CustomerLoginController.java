@@ -1,10 +1,9 @@
 package com.bit.backend.controllers;
 
-import com.bit.backend.dtos.CustomerLoginDto;
-import com.bit.backend.dtos.EmployeeLoginDto;
-import com.bit.backend.dtos.EmployeeRegistrationDto;
+import com.bit.backend.dtos.*;
 import com.bit.backend.exceptions.AppException;
 import com.bit.backend.services.CustomerLoginServiceI;
+import com.bit.backend.services.UserServiceI;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -15,17 +14,45 @@ import java.util.List;
 @RestController
 public class CustomerLoginController {
     private final CustomerLoginServiceI customerLoginServiceI;
+    private final UserServiceI userServiceI;
 
-    public CustomerLoginController(CustomerLoginServiceI customerLoginServiceI) {
+    public CustomerLoginController(CustomerLoginServiceI customerLoginServiceI, UserServiceI userServiceI) {
         this.customerLoginServiceI = customerLoginServiceI;
+        this.userServiceI = userServiceI;
     }
 
     @PostMapping("/customer-login")
     public ResponseEntity<CustomerLoginDto> addCustomerLogin(@RequestBody CustomerLoginDto customerLoginDto){
-        try{
-            CustomerLoginDto customerLoginDtoResponse = customerLoginServiceI.addCustomerLoginEntity(customerLoginDto);
+        customerLoginDto.setRole("CUSTOMER");
+        CustomerLoginDto loginDto = customerLoginDto;
 
-            return ResponseEntity.created(URI.create("/customer-login" + customerLoginDtoResponse.getId())).body(customerLoginDtoResponse);
+        try{
+
+            SignUpDto signUpDto = new SignUpDto(customerLoginDto.getFirstName(), customerLoginDto.getLastName(), customerLoginDto.getUserName(), customerLoginDto.getPassword().toCharArray(), customerLoginDto.getRole());
+
+            customerLoginDto.setPassword(null);
+            loginDto.setPassword(null);
+
+            // add validations to check user name
+
+            boolean userExist = userServiceI.checkIfUserNameExist(customerLoginDto.getUserName());
+
+            if (userExist) {
+                new AppException("User Name Already Exists", HttpStatus.NOT_FOUND);
+            }
+
+            CustomerLoginDto customerLoginDtoResponse = customerLoginServiceI.addCustomerLoginEntity(customerLoginDto); /*Create Login Entity*/
+            UserDto user = userServiceI.register(signUpDto); /*Create User Entity*/
+
+            if (user.getId() != null) {
+                long loginId = customerLoginDtoResponse.getId();
+                long userId = user.getId();
+                CustomerLoginDto newLoginDto = customerLoginDtoResponse;
+                newLoginDto.setUserId(userId);
+                loginDto = customerLoginServiceI.updateCustomer(loginId, newLoginDto);
+            }
+
+            return ResponseEntity.created(URI.create("/customer-login" + loginDto.getId())).body(loginDto);
 
         }catch (Exception e){
             throw new AppException("Request failed with error " + e, HttpStatus.INTERNAL_SERVER_ERROR);
@@ -45,7 +72,26 @@ public class CustomerLoginController {
     @PutMapping("/customer-login/{id}")
     public ResponseEntity<CustomerLoginDto> updateCustomer(@PathVariable long id, @RequestBody CustomerLoginDto customerLoginDto){
         try{
+
+            boolean userExist = userServiceI.checkIfUserNameExist(customerLoginDto.getUserName());
+
+            if (userExist) {
+                new AppException("User Name Already Exists", HttpStatus.NOT_FOUND);
+            }
+
+            String password = "";
+            char[] passwordArray = new char[0];
+
+            if (customerLoginDto.getPassword() != null && !customerLoginDto.getPassword().isEmpty()) {
+                passwordArray = password.toCharArray();
+            }
+            customerLoginDto.setPassword(null);
+            customerLoginDto.setRole("CUSTOMER");
             CustomerLoginDto  updatedCustomer=customerLoginServiceI.updateCustomer(id,customerLoginDto);
+            customerLoginDto.setUserId(updatedCustomer.getUserId());
+
+            SignUpDto signUpDto = new SignUpDto(customerLoginDto.getFirstName(), customerLoginDto.getLastName(), customerLoginDto.getUserName(), passwordArray, customerLoginDto.getRole());
+            boolean value = userServiceI.updateUser(signUpDto, customerLoginDto.getUserId());
             return ResponseEntity.ok(updatedCustomer);
         }catch (Exception e){
             throw new AppException("Request failed with error " + e, HttpStatus.INTERNAL_SERVER_ERROR);

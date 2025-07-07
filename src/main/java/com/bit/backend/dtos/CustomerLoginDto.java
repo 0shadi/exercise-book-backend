@@ -7,16 +7,20 @@ public class CustomerLoginDto {
     private String lastName;
     private String userName;
     private String password;
+    private String role;
+    private Long userId;
 
     public CustomerLoginDto() {
     }
 
-    public CustomerLoginDto(Long id, String firstName, String lastName, String userName, String password) {
+    public CustomerLoginDto(Long id, String firstName, String lastName, String userName, String password, String role, Long userId) {
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
         this.userName = userName;
         this.password = password;
+        this.role = role;
+        this.userId = userId;
     }
 
     public String getFirstName() {
@@ -57,5 +61,21 @@ public class CustomerLoginDto {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public String getRole() {
+        return role;
+    }
+
+    public void setRole(String role) {
+        this.role = role;
+    }
+
+    public Long getUserId() {
+        return userId;
+    }
+
+    public void setUserId(Long userId) {
+        this.userId = userId;
     }
 }
