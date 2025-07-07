@@ -60,6 +60,7 @@ public class EmployeeLoginService implements EmployeeLoginServiceI {
 
             EmployeeLoginEntity newEmployeeEntity=employeeLoginMapper.toEmployeeLoginEntity(employeeLoginDto);
             newEmployeeEntity.setId(id);//To set the employeeNumber of the newEntity
+            newEmployeeEntity.setUserId(OptionalEmployeeEntity.get().getUserId());
             EmployeeLoginEntity savedEntity=employeeLoginRepository.save(newEmployeeEntity);
             EmployeeLoginDto updatedDto=employeeLoginMapper.toEmployeeLoginDto(savedEntity);
 
