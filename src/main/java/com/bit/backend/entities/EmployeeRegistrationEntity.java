@@ -11,6 +11,12 @@ public class EmployeeRegistrationEntity {
     @GeneratedValue(strategy= GenerationType.IDENTITY)
     private long employeeNumber;
 
+    @Column(name="first_name")
+    private String firstName;
+
+    @Column(name="last_name")
+    private String lastName;
+
     @Column(name="full_name")
     private String fullName;
 
@@ -41,8 +47,10 @@ public class EmployeeRegistrationEntity {
     @Column(name="job_role")
     private String jobRole;
 
-    public EmployeeRegistrationEntity(long employeeNumber, String fullName, String callingName, String nic, String contactNo, LocalDate bDay, String gender, String address, String emergencyContactNumber, String email, String jobRole) {
+    public EmployeeRegistrationEntity(long employeeNumber, String firstName, String lastName, String fullName, String callingName, String nic, String contactNo, LocalDate bDay, String gender, String address, String emergencyContactNumber, String email, String jobRole) {
         this.employeeNumber = employeeNumber;
+        this.firstName = firstName;
+        this.lastName = lastName;
         this.fullName = fullName;
         this.callingName = callingName;
         this.nic = nic;
@@ -53,6 +61,22 @@ public class EmployeeRegistrationEntity {
         this.emergencyContactNumber = emergencyContactNumber;
         this.email = email;
         this.jobRole = jobRole;
+    }
+
+    public String getFirstName() {
+        return firstName;
+    }
+
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
+
+    public String getLastName() {
+        return lastName;
+    }
+
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
     }
 
     public String getJobRole() {

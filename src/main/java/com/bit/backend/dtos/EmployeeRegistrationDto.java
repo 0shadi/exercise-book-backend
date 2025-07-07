@@ -4,6 +4,8 @@ import java.time.LocalDate;
 
 public class EmployeeRegistrationDto {
     private long employeeNumber;
+    private String firstName;
+    private String lastName;
     private String fullName;
     private String callingName;
     private String nic;
@@ -14,6 +16,41 @@ public class EmployeeRegistrationDto {
     private String emergencyContactNumber;
     private String email;
     private String jobRole;
+
+    public EmployeeRegistrationDto() {
+    }
+
+    public EmployeeRegistrationDto(long employeeNumber, String firstName, String lastName, String fullName, String callingName, String nic, String contactNo, LocalDate bDay, String gender, String address, String emergencyContactNumber, String email, String jobRole) {
+        this.employeeNumber = employeeNumber;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.fullName = fullName;
+        this.callingName = callingName;
+        this.nic = nic;
+        this.contactNo = contactNo;
+        this.bDay = bDay;
+        this.gender = gender;
+        this.address = address;
+        this.emergencyContactNumber = emergencyContactNumber;
+        this.email = email;
+        this.jobRole = jobRole;
+    }
+
+    public String getFirstName() {
+        return firstName;
+    }
+
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
+
+    public String getLastName() {
+        return lastName;
+    }
+
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
+    }
 
     public String getContactNo() {
         return contactNo;
@@ -29,23 +66,6 @@ public class EmployeeRegistrationDto {
 
     public void setJobRole(String jobRole) {
         this.jobRole = jobRole;
-    }
-
-    public EmployeeRegistrationDto(long employeeNumber, String fullName, String callingName, String nic, String contactNo, LocalDate bDay, String gender, String address, String emergencyContactNumber, String email, String jobRole) {
-        this.employeeNumber = employeeNumber;
-        this.fullName = fullName;
-        this.callingName = callingName;
-        this.nic = nic;
-        this.contactNo = contactNo;
-        this.bDay = bDay;
-        this.gender = gender;
-        this.address = address;
-        this.emergencyContactNumber = emergencyContactNumber;
-        this.email = email;
-        this.jobRole = jobRole;
-    }
-
-    public EmployeeRegistrationDto() {
     }
 
     public String getEmail() {
