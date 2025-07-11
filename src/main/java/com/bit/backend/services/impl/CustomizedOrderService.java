@@ -15,6 +15,7 @@ import com.bit.backend.services.CustomizedOrderServiceI;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
+import java.util.Base64;
 import java.util.List;
 import java.util.Optional;
 
@@ -103,6 +104,13 @@ public class CustomizedOrderService implements CustomizedOrderServiceI {
             }
             List<CustomizedBookDetailsEntity> itemEntity = optionalEntity.get();
             List<CustomizedBookDetailsDto> customizedBookDetailsDto = customizedBookDetailsMapper.toCustomizedBookDetailsDtoList(itemEntity);
+
+            for (CustomizedBookDetailsDto dto : customizedBookDetailsDto) {
+                if (dto.getCoverPhoto() != null) {
+                    String base64Image = Base64.getEncoder().encodeToString(dto.getCoverPhoto());
+                    dto.setImageBase64(base64Image);
+                }
+            }
 
             return customizedBookDetailsDto;
 

@@ -7,6 +7,7 @@ public class CustomizedBookDetailsDto {
     private long orderId;
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     private byte[] coverPhoto;
+    private String imageBase64;
     private String material;
     private String paperColor;
     private String size;
@@ -18,10 +19,11 @@ public class CustomizedBookDetailsDto {
     public CustomizedBookDetailsDto() {
     }
 
-    public CustomizedBookDetailsDto(long id, long orderId, byte[] coverPhoto, String material, String paperColor, String size, String pagesCount, String paperType, String paperQuality, String quantity) {
+    public CustomizedBookDetailsDto(long id, long orderId, byte[] coverPhoto, String imageBase64, String material, String paperColor, String size, String pagesCount, String paperType, String paperQuality, String quantity) {
         this.id = id;
         this.orderId = orderId;
         this.coverPhoto = coverPhoto;
+        this.imageBase64 = imageBase64;
         this.material = material;
         this.paperColor = paperColor;
         this.size = size;
@@ -109,5 +111,13 @@ public class CustomizedBookDetailsDto {
 
     public void setQuantity(String quantity) {
         this.quantity = quantity;
+    }
+
+    public String getImageBase64() {
+        return imageBase64;
+    }
+
+    public void setImageBase64(String imageBase64) {
+        this.imageBase64 = imageBase64;
     }
 }
