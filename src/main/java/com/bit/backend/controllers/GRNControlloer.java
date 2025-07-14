@@ -2,9 +2,11 @@ package com.bit.backend.controllers;
 
 import com.bit.backend.dtos.GRNDTO;
 import com.bit.backend.dtos.ItemRegistrationDto;
+import com.bit.backend.dtos.SupplierRegistrationDto;
 import com.bit.backend.exceptions.AppException;
 import com.bit.backend.services.GRNServiceI;
 import com.bit.backend.services.ItemRegistrationServiceI;
+import com.bit.backend.services.SupplierRegistrationServiceI;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -19,11 +21,13 @@ public class GRNControlloer {
     //FormDemoServiceI type variable
      private final GRNServiceI grnServiceI;
      private final ItemRegistrationServiceI itemRegServiceI;
+     private final SupplierRegistrationServiceI supplierRegistrationServiceI;
 
      //Dependency Injection (constructor injection)- Call constructor - assign value to the variable
-    public GRNControlloer(GRNServiceI grnServiceI, ItemRegistrationServiceI itemRegServiceI) {
+    public GRNControlloer(GRNServiceI grnServiceI, ItemRegistrationServiceI itemRegServiceI, SupplierRegistrationServiceI supplierRegistrationServiceI) {
         this.grnServiceI = grnServiceI;
         this.itemRegServiceI = itemRegServiceI;
+        this.supplierRegistrationServiceI = supplierRegistrationServiceI;
     }
 
     //first create DTO and Entitiy classes with constructors and getter setter
@@ -76,6 +80,10 @@ public ResponseEntity<GRNDTO> updateOuterGRN(@PathVariable long id, @RequestBody
         return ResponseEntity.ok(grndto);
     }
 
-
+    @GetMapping("/grn/get-suppliers")
+    public ResponseEntity<List<SupplierRegistrationDto>> getSuppliers(){
+        List<SupplierRegistrationDto> supplierDtoList = supplierRegistrationServiceI.getSupplierEntity();
+        return ResponseEntity.ok().body(supplierDtoList);
+    }
 
 }
