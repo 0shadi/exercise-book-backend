@@ -60,7 +60,7 @@ public class CustomerLoginService implements CustomerLoginServiceI {
 
             CustomerLoginEntity newCustomerEntity=customerLoginMapper.toCustomerLoginEntity(customerLoginDto);
             newCustomerEntity.setId(id);//To set the customerNumber of the newEntity
-            newCustomerEntity.setUserId(OptionalCustomerEntity.get().getUserId());
+            newCustomerEntity.setUserId(customerLoginDto.getUserId() != null ? customerLoginDto.getUserId(): OptionalCustomerEntity.get().getUserId());
             CustomerLoginEntity savedEntity=customerLoginRepository.save(newCustomerEntity);
             CustomerLoginDto updatedDto=customerLoginMapper.toCustomerLoginDto(savedEntity);
 
@@ -84,6 +84,20 @@ public class CustomerLoginService implements CustomerLoginServiceI {
             return customerLoginMapper.toCustomerLoginDto(OptionalCustomerEntity.get());
         }
         catch (Exception e){
+            throw new AppException("Request failed with error" +e, HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @Override
+    public boolean checkIfCustomerExist(CustomerLoginDto customerLoginDto) {
+        try {
+            Optional<List<CustomerLoginEntity>> optionalCustomerLoginEntityList = customerLoginRepository.findByCustomerId(customerLoginDto.getCustomerId());
+
+            if (optionalCustomerLoginEntityList.isPresent() && optionalCustomerLoginEntityList.get().size() > 0) {
+                return true;
+            }
+            return false;
+        } catch (Exception e) {
             throw new AppException("Request failed with error" +e, HttpStatus.BAD_REQUEST);
         }
     }

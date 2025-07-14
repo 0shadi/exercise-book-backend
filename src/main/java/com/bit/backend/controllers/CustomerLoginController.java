@@ -26,23 +26,33 @@ public class CustomerLoginController {
         customerLoginDto.setRole("CUSTOMER");
         CustomerLoginDto loginDto = customerLoginDto;
 
+        String password = new String(customerLoginDto.getPassword());
+
+        customerLoginDto.setPassword(null);
+        loginDto.setPassword(null);
+
         try{
 
-            SignUpDto signUpDto = new SignUpDto(customerLoginDto.getFirstName(), customerLoginDto.getLastName(), customerLoginDto.getUserName(), customerLoginDto.getPassword().toCharArray(), customerLoginDto.getRole(), null);
+            SignUpDto signUpDto = new SignUpDto(customerLoginDto.getCustomerName(), customerLoginDto.getCustomerName(), customerLoginDto.getUserName(), password.toCharArray(), customerLoginDto.getRole(), null, null);
 
-            customerLoginDto.setPassword(null);
-            loginDto.setPassword(null);
+            // add validations to check login already exists for customer
+            boolean customerExist = customerLoginServiceI.checkIfCustomerExist(customerLoginDto);
+
+            if (customerExist) {
+                throw new AppException("Customer already has a login!", HttpStatus.NOT_FOUND);
+            }
 
             // add validations to check user name
-
             boolean userExist = userServiceI.checkIfUserNameExist(customerLoginDto.getUserName());
 
             if (userExist) {
                 throw new AppException("User Name Already Exists", HttpStatus.NOT_FOUND);
             }
 
-            CustomerLoginDto customerLoginDtoResponse = customerLoginServiceI.addCustomerLoginEntity(customerLoginDto); /*Create Login Entity*/
-            UserDto user = userServiceI.register(signUpDto); /*Create User Entity*/
+            /*Create Login Entity*/
+            CustomerLoginDto customerLoginDtoResponse = customerLoginServiceI.addCustomerLoginEntity(customerLoginDto);
+            /*Create User Entity*/
+            UserDto user = userServiceI.register(signUpDto);
 
             if (user.getId() != null) {
                 long loginId = customerLoginDtoResponse.getId();
@@ -50,6 +60,12 @@ public class CustomerLoginController {
                 CustomerLoginDto newLoginDto = customerLoginDtoResponse;
                 newLoginDto.setUserId(userId);
                 loginDto = customerLoginServiceI.updateCustomer(loginId, newLoginDto);
+
+                SignUpDto updatedSignUpDto = new SignUpDto(loginDto.getCustomerName(), loginDto.getCustomerName(),
+                        loginDto.getUserName(),password.toCharArray(),"CUSTOMER", null, loginDto.getId());
+
+                boolean isCustomerUpdated = userServiceI.updateUser(updatedSignUpDto, userId);
+
             }
 
             return ResponseEntity.created(URI.create("/customer-login" + loginDto.getId())).body(loginDto);
@@ -83,14 +99,14 @@ public class CustomerLoginController {
             char[] passwordArray = new char[0];
 
             if (customerLoginDto.getPassword() != null && !customerLoginDto.getPassword().isEmpty()) {
-                passwordArray = password.toCharArray();
+                passwordArray = customerLoginDto.getPassword().toCharArray();
             }
             customerLoginDto.setPassword(null);
             customerLoginDto.setRole("CUSTOMER");
             CustomerLoginDto  updatedCustomer=customerLoginServiceI.updateCustomer(id,customerLoginDto);
             customerLoginDto.setUserId(updatedCustomer.getUserId());
 
-            SignUpDto signUpDto = new SignUpDto(customerLoginDto.getFirstName(), customerLoginDto.getLastName(), customerLoginDto.getUserName(), passwordArray, customerLoginDto.getRole(), null);
+            SignUpDto signUpDto = new SignUpDto(customerLoginDto.getCustomerName(), customerLoginDto.getCustomerName(), customerLoginDto.getUserName(), passwordArray, customerLoginDto.getRole(), null, id);
             boolean value = userServiceI.updateUser(signUpDto, customerLoginDto.getUserId());
             return ResponseEntity.ok(updatedCustomer);
         }catch (Exception e){

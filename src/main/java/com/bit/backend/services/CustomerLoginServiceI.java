@@ -12,4 +12,6 @@ public interface CustomerLoginServiceI {
     CustomerLoginDto updateCustomer(long id, CustomerLoginDto customerLoginDto);
 
     CustomerLoginDto deleteCustomer(long id);
+
+    boolean checkIfCustomerExist(CustomerLoginDto customerLoginDto);
 }

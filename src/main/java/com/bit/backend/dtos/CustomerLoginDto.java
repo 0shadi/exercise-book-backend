@@ -3,40 +3,24 @@ package com.bit.backend.dtos;
 
 public class CustomerLoginDto {
     private Long id;
-    private String firstName;
-    private String lastName;
+    private String customerName;
     private String userName;
     private String password;
     private String role;
     private Long userId;
+    private Long customerId;
 
     public CustomerLoginDto() {
     }
 
-    public CustomerLoginDto(Long id, String firstName, String lastName, String userName, String password, String role, Long userId) {
+    public CustomerLoginDto(Long id, String customerName, String userName, String password, String role, Long userId, Long customerId) {
         this.id = id;
-        this.firstName = firstName;
-        this.lastName = lastName;
+        this.customerName = customerName;
         this.userName = userName;
         this.password = password;
         this.role = role;
         this.userId = userId;
-    }
-
-    public String getFirstName() {
-        return firstName;
-    }
-
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
-    }
-
-    public String getLastName() {
-        return lastName;
-    }
-
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
+        this.customerId = customerId;
     }
 
     public Long getId() {
@@ -45,6 +29,14 @@ public class CustomerLoginDto {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public String getCustomerName() {
+        return customerName;
+    }
+
+    public void setCustomerName(String customerName) {
+        this.customerName = customerName;
     }
 
     public String getUserName() {
@@ -77,5 +69,13 @@ public class CustomerLoginDto {
 
     public void setUserId(Long userId) {
         this.userId = userId;
+    }
+
+    public Long getCustomerId() {
+        return customerId;
+    }
+
+    public void setCustomerId(Long customerId) {
+        this.customerId = customerId;
     }
 }

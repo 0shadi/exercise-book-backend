@@ -33,7 +33,7 @@ public class EmployeeLoginController {
 
         try{
             SignUpDto signUpDto = new SignUpDto(employeeLoginDto.getFirstName(), employeeLoginDto.getLastName(), employeeLoginDto.getUserName(),
-                                                                            password.toCharArray(), employeeLoginDto.getRole(), null);
+                                                                            password.toCharArray(), employeeLoginDto.getRole(), null, null);
 
 
             // validation to check if a login already exists for employee
@@ -63,7 +63,7 @@ public class EmployeeLoginController {
                 loginDto = employeeLoginServiceI.updateEmployee(loginId, newLoginDto);
 
                 SignUpDto updatedSignUpDto = new SignUpDto(loginDto.getFirstName(), loginDto.getLastName(),
-                        loginDto.getUserName(),password.toCharArray(),"EMPLOYEE", loginDto.getId());
+                        loginDto.getUserName(),password.toCharArray(),"EMPLOYEE", loginDto.getId(), null);
 
                 boolean isUserUpdated = userServiceI.updateUser(updatedSignUpDto, userId);
             }
@@ -106,7 +106,7 @@ public class EmployeeLoginController {
             EmployeeLoginDto  updatedEmployee=employeeLoginServiceI.updateEmployee(id,employeeLoginDto);
             employeeLoginDto.setUserId(updatedEmployee.getUserId());
 
-            SignUpDto signUpDto = new SignUpDto(employeeLoginDto.getFirstName(), employeeLoginDto.getLastName(), employeeLoginDto.getUserName(), passwordArray, employeeLoginDto.getRole(), id);
+            SignUpDto signUpDto = new SignUpDto(employeeLoginDto.getFirstName(), employeeLoginDto.getLastName(), employeeLoginDto.getUserName(), passwordArray, employeeLoginDto.getRole(), id, null);
             boolean isUserUpdated = userServiceI.updateUser(signUpDto, employeeLoginDto.getUserId());
             return ResponseEntity.ok(updatedEmployee);
         }catch (Exception e){

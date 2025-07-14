@@ -118,14 +118,13 @@ public class UserService implements UserServiceI {
                 userId).orElseThrow(() -> new AppException("Unknown User", HttpStatus.NOT_FOUND));
         try {
             user.setFirstName(signUpDto.firstName());
-            user.setLastName(signUpDto.lastName());
+            user.setLastName(signUpDto.lastName() != null ? signUpDto.lastName(): null);
             user.setLogin(signUpDto.login());
 
             if (user.getRole().equals("EMPLOYEE")) {
                 user.setEmployeeLoginId(signUpDto.employeeLoginId());
             } else if (user.getRole().equals("CUSTOMER")) {
-                // set customerLoginId
-//                user.setEmployeeLoginId(signUpDto.employeeLoginId());
+                user.setCustomerLoginId(signUpDto.customerLoginId());
             }
 
 
