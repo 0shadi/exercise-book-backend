@@ -12,4 +12,6 @@ public interface EmployeeLoginServiceI {
     EmployeeLoginDto updateEmployee(long id, EmployeeLoginDto employeeLoginDto);
 
     EmployeeLoginDto deleteEmployee(long id);
+
+    boolean checkIfEmployeeExist(EmployeeLoginDto employeeLoginDto);
 }

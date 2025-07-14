@@ -121,6 +121,14 @@ public class UserService implements UserServiceI {
             user.setLastName(signUpDto.lastName());
             user.setLogin(signUpDto.login());
 
+            if (user.getRole().equals("EMPLOYEE")) {
+                user.setEmployeeLoginId(signUpDto.employeeLoginId());
+            } else if (user.getRole().equals("CUSTOMER")) {
+                // set customerLoginId
+//                user.setEmployeeLoginId(signUpDto.employeeLoginId());
+            }
+
+
             if (signUpDto.password().length > 0) {
                 if (!passwordEncoder.matches(CharBuffer.wrap(signUpDto.password()), user.getPassword())) {
                     user.setPassword(passwordEncoder.encode(CharBuffer.wrap(signUpDto.password())));
@@ -129,6 +137,23 @@ public class UserService implements UserServiceI {
             userRepository.save(user);
             return true;
         } catch(Exception e) {
+            throw new AppException("Error occurred! Please try again", HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @Override
+    public boolean checkIfUserNameExistForOtherUsers(String userName) {
+        try {
+
+            List<User> userList = userRepository.checkIfUserNameExistForOtherUsers(userName);
+
+            if (userList.size() > 0) {
+                return true;
+            }
+
+            return false;
+
+        } catch (Exception e) {
             throw new AppException("Error occurred! Please try again", HttpStatus.BAD_REQUEST);
         }
     }

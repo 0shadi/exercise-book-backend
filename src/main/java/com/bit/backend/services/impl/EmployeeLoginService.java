@@ -60,7 +60,7 @@ public class EmployeeLoginService implements EmployeeLoginServiceI {
 
             EmployeeLoginEntity newEmployeeEntity=employeeLoginMapper.toEmployeeLoginEntity(employeeLoginDto);
             newEmployeeEntity.setId(id);//To set the employeeNumber of the newEntity
-            newEmployeeEntity.setUserId(OptionalEmployeeEntity.get().getUserId());
+            newEmployeeEntity.setUserId(employeeLoginDto.getUserId() != null ? employeeLoginDto.getUserId(): OptionalEmployeeEntity.get().getUserId());
             EmployeeLoginEntity savedEntity=employeeLoginRepository.save(newEmployeeEntity);
             EmployeeLoginDto updatedDto=employeeLoginMapper.toEmployeeLoginDto(savedEntity);
 
@@ -84,6 +84,20 @@ public class EmployeeLoginService implements EmployeeLoginServiceI {
             return employeeLoginMapper.toEmployeeLoginDto(OptionalEmployeeEntity.get());
         }
         catch (Exception e){
+            throw new AppException("Request failed with error" +e, HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @Override
+    public boolean checkIfEmployeeExist(EmployeeLoginDto employeeLoginDto) {
+        try {
+            Optional<List<EmployeeLoginEntity>> oEmployeeLoginEntityList = employeeLoginRepository.findByEmployee(employeeLoginDto.getEmployee());
+
+            if (oEmployeeLoginEntityList.isPresent() && oEmployeeLoginEntityList.get().size() > 0) {
+                return true;
+            }
+            return false;
+        } catch (Exception e) {
             throw new AppException("Request failed with error" +e, HttpStatus.BAD_REQUEST);
         }
     }

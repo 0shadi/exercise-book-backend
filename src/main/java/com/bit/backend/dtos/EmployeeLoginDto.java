@@ -8,11 +8,12 @@ public class EmployeeLoginDto {
     private String password;
     private String role;
     private Long userId;
+    private Long employee;
 
     public EmployeeLoginDto() {
     }
 
-    public EmployeeLoginDto(Long id, String firstName, String lastName, String userName, String password, String role, Long userId) {
+    public EmployeeLoginDto(Long id, String firstName, String lastName, String userName, String password, String role, Long userId, Long employee) {
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
@@ -20,6 +21,7 @@ public class EmployeeLoginDto {
         this.password = password;
         this.role = role;
         this.userId = userId;
+        this.employee = employee;
     }
 
     public String getRole() {
@@ -76,5 +78,13 @@ public class EmployeeLoginDto {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public Long getEmployee() {
+        return employee;
+    }
+
+    public void setEmployee(Long employee) {
+        this.employee = employee;
     }
 }

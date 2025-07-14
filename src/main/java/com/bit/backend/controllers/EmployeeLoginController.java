@@ -26,22 +26,34 @@ public class EmployeeLoginController {
         employeeLoginDto.setRole("EMPLOYEE");
         EmployeeLoginDto loginDto = employeeLoginDto;
 
+        String password = new String(employeeLoginDto.getPassword());
+
+        employeeLoginDto.setPassword(null);
+        loginDto.setPassword(null);
+
         try{
-            SignUpDto signUpDto = new SignUpDto(employeeLoginDto.getFirstName(), employeeLoginDto.getLastName(), employeeLoginDto.getUserName(), employeeLoginDto.getPassword().toCharArray(), employeeLoginDto.getRole());
+            SignUpDto signUpDto = new SignUpDto(employeeLoginDto.getFirstName(), employeeLoginDto.getLastName(), employeeLoginDto.getUserName(),
+                                                                            password.toCharArray(), employeeLoginDto.getRole(), null);
 
-            employeeLoginDto.setPassword(null);
-            loginDto.setPassword(null);
 
-            // add validations to check user name
+            // validation to check if a login already exists for employee
+            boolean employeeExist = employeeLoginServiceI.checkIfEmployeeExist(employeeLoginDto);
 
+            if (employeeExist) {
+                throw new AppException("Login already exists for the employee", HttpStatus.NOT_FOUND);
+            }
+
+            // validations to check user name in User table
             boolean userExist = userServiceI.checkIfUserNameExist(employeeLoginDto.getUserName());
 
             if (userExist) {
-                new AppException("User Name Already Exists", HttpStatus.NOT_FOUND);
+                throw new AppException("User Name Already Exists! Please try with different user name", HttpStatus.NOT_FOUND);
             }
 
-            EmployeeLoginDto employeeLoginDtoResponse = employeeLoginServiceI.addEmployeeLoginEntity(employeeLoginDto); /*Create Login Entity*/
-            UserDto user = userServiceI.register(signUpDto); /*Create User Entity*/
+            /*Create Login Entity*/
+            EmployeeLoginDto employeeLoginDtoResponse = employeeLoginServiceI.addEmployeeLoginEntity(employeeLoginDto);
+            /*Create User Entity*/
+            UserDto user = userServiceI.register(signUpDto);
 
             if (user.getId() != null) {
                 long loginId = employeeLoginDtoResponse.getId();
@@ -49,6 +61,11 @@ public class EmployeeLoginController {
                 EmployeeLoginDto newLoginDto = employeeLoginDtoResponse;
                 newLoginDto.setUserId(userId);
                 loginDto = employeeLoginServiceI.updateEmployee(loginId, newLoginDto);
+
+                SignUpDto updatedSignUpDto = new SignUpDto(loginDto.getFirstName(), loginDto.getLastName(),
+                        loginDto.getUserName(),password.toCharArray(),"EMPLOYEE", loginDto.getId());
+
+                boolean isUserUpdated = userServiceI.updateUser(updatedSignUpDto, userId);
             }
 
             return ResponseEntity.created(URI.create("/employee-login" + loginDto.getId())).body(loginDto);
@@ -71,25 +88,26 @@ public class EmployeeLoginController {
     @PutMapping("/employee-login/{id}")
     public ResponseEntity<EmployeeLoginDto> updateEmployee(@PathVariable long id, @RequestBody EmployeeLoginDto employeeLoginDto){
         try{
-            boolean userExist = userServiceI.checkIfUserNameExist(employeeLoginDto.getUserName());
+            boolean userExist = userServiceI.checkIfUserNameExistForOtherUsers(employeeLoginDto.getUserName());
             if(userExist){
-                new AppException("User name already exists",HttpStatus.NOT_FOUND);
+                throw new AppException("User name already exists",HttpStatus.NOT_FOUND);
             }
 
             String password = "";
             char[] passwordArray = new char[0];
 
             if(employeeLoginDto.getPassword() != null && !employeeLoginDto.getPassword().isEmpty()){
-                passwordArray = password.toCharArray();
+                passwordArray = employeeLoginDto.getPassword().toCharArray();
             }
 
             employeeLoginDto.setPassword(null);
-            employeeLoginDto.setRole("CUSTOMER");
+            employeeLoginDto.setRole("EMPLOYEE");
 
             EmployeeLoginDto  updatedEmployee=employeeLoginServiceI.updateEmployee(id,employeeLoginDto);
             employeeLoginDto.setUserId(updatedEmployee.getUserId());
 
-            SignUpDto signUpDto = new SignUpDto(employeeLoginDto.getFirstName(), employeeLoginDto.getLastName(), employeeLoginDto.getUserName(), passwordArray, employeeLoginDto.getRole());
+            SignUpDto signUpDto = new SignUpDto(employeeLoginDto.getFirstName(), employeeLoginDto.getLastName(), employeeLoginDto.getUserName(), passwordArray, employeeLoginDto.getRole(), id);
+            boolean isUserUpdated = userServiceI.updateUser(signUpDto, employeeLoginDto.getUserId());
             return ResponseEntity.ok(updatedEmployee);
         }catch (Exception e){
             throw new AppException("Request failed with error " + e, HttpStatus.INTERNAL_SERVER_ERROR);

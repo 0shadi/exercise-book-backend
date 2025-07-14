@@ -28,7 +28,7 @@ public class CustomerLoginController {
 
         try{
 
-            SignUpDto signUpDto = new SignUpDto(customerLoginDto.getFirstName(), customerLoginDto.getLastName(), customerLoginDto.getUserName(), customerLoginDto.getPassword().toCharArray(), customerLoginDto.getRole());
+            SignUpDto signUpDto = new SignUpDto(customerLoginDto.getFirstName(), customerLoginDto.getLastName(), customerLoginDto.getUserName(), customerLoginDto.getPassword().toCharArray(), customerLoginDto.getRole(), null);
 
             customerLoginDto.setPassword(null);
             loginDto.setPassword(null);
@@ -38,7 +38,7 @@ public class CustomerLoginController {
             boolean userExist = userServiceI.checkIfUserNameExist(customerLoginDto.getUserName());
 
             if (userExist) {
-                new AppException("User Name Already Exists", HttpStatus.NOT_FOUND);
+                throw new AppException("User Name Already Exists", HttpStatus.NOT_FOUND);
             }
 
             CustomerLoginDto customerLoginDtoResponse = customerLoginServiceI.addCustomerLoginEntity(customerLoginDto); /*Create Login Entity*/
@@ -76,7 +76,7 @@ public class CustomerLoginController {
             boolean userExist = userServiceI.checkIfUserNameExist(customerLoginDto.getUserName());
 
             if (userExist) {
-                new AppException("User Name Already Exists", HttpStatus.NOT_FOUND);
+                throw new AppException("User Name Already Exists", HttpStatus.NOT_FOUND);
             }
 
             String password = "";
@@ -90,7 +90,7 @@ public class CustomerLoginController {
             CustomerLoginDto  updatedCustomer=customerLoginServiceI.updateCustomer(id,customerLoginDto);
             customerLoginDto.setUserId(updatedCustomer.getUserId());
 
-            SignUpDto signUpDto = new SignUpDto(customerLoginDto.getFirstName(), customerLoginDto.getLastName(), customerLoginDto.getUserName(), passwordArray, customerLoginDto.getRole());
+            SignUpDto signUpDto = new SignUpDto(customerLoginDto.getFirstName(), customerLoginDto.getLastName(), customerLoginDto.getUserName(), passwordArray, customerLoginDto.getRole(), null);
             boolean value = userServiceI.updateUser(signUpDto, customerLoginDto.getUserId());
             return ResponseEntity.ok(updatedCustomer);
         }catch (Exception e){
