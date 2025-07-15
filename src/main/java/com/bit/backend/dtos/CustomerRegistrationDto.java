@@ -4,6 +4,8 @@ public class CustomerRegistrationDto {
     private long customerId;
     private String customerType;
     private String customerName;
+    private String firstName;
+    private String lastName;
     private String contactNo;
     private String email;
     private String address;
@@ -11,10 +13,12 @@ public class CustomerRegistrationDto {
     public CustomerRegistrationDto() {
     }
 
-    public CustomerRegistrationDto(long customerId, String customerType, String customerName, String contactNo, String email, String address) {
+    public CustomerRegistrationDto(long customerId, String customerType, String customerName, String firstName, String lastName, String contactNo, String email, String address) {
         this.customerId = customerId;
         this.customerType = customerType;
         this.customerName = customerName;
+        this.firstName = firstName;
+        this.lastName = lastName;
         this.contactNo = contactNo;
         this.email = email;
         this.address = address;
@@ -66,5 +70,21 @@ public class CustomerRegistrationDto {
 
     public void setAddress(String address) {
         this.address = address;
+    }
+
+    public String getFirstName() {
+        return firstName;
+    }
+
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
+
+    public String getLastName() {
+        return lastName;
+    }
+
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
     }
 }

@@ -16,6 +16,12 @@ public class CustomerRegistrationEntity {
     @Column(name="customer_name")
     private String customerName;
 
+    @Column(name="first_name")
+    private String firstName;
+
+    @Column(name="last_name")
+    private String lastName;
+
     @Column(name="contact_no")
     private String contactNo;
 
@@ -28,10 +34,12 @@ public class CustomerRegistrationEntity {
     public CustomerRegistrationEntity() {
     }
 
-    public CustomerRegistrationEntity(long customerId, String customerType, String customerName, String contactNo, String email, String address) {
+    public CustomerRegistrationEntity(long customerId, String customerType, String customerName, String firstName, String lastName, String contactNo, String email, String address) {
         this.customerId = customerId;
         this.customerType = customerType;
         this.customerName = customerName;
+        this.firstName = firstName;
+        this.lastName = lastName;
         this.contactNo = contactNo;
         this.email = email;
         this.address = address;
@@ -83,5 +91,21 @@ public class CustomerRegistrationEntity {
 
     public void setAddress(String address) {
         this.address = address;
+    }
+
+    public String getFirstName() {
+        return firstName;
+    }
+
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
+
+    public String getLastName() {
+        return lastName;
+    }
+
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
     }
 }
