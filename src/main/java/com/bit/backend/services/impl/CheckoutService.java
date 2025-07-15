@@ -7,10 +7,7 @@ import com.bit.backend.mappers.BillingDetailsMapper;
 import com.bit.backend.mappers.OrderDetailsMapper;
 import com.bit.backend.mappers.OrderItemDetailsMapper;
 import com.bit.backend.mappers.OrderPaymentDetailsMapper;
-import com.bit.backend.repositories.BillingDetailsRepository;
-import com.bit.backend.repositories.OrderDetailsRepository;
-import com.bit.backend.repositories.OrderItemDetailsRepository;
-import com.bit.backend.repositories.OrderPaymentDetailsRepository;
+import com.bit.backend.repositories.*;
 import com.bit.backend.services.CheckoutServiceI;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -28,8 +25,13 @@ public class CheckoutService implements CheckoutServiceI {
     private final OrderItemDetailsMapper orderItemDetailsMapper;
     private final OrderPaymentDetailsRepository orderPaymentDetailsRepository;
     private final OrderPaymentDetailsMapper orderPaymentDetailsMapper;
+    private final StockRepository stockRepository;
 
-    public CheckoutService(BillingDetailsRepository billingDetailsRepository, BillingDetailsMapper billingDetailsMapper, OrderDetailsRepository orderDetailsRepository, OrderDetailsMapper orderDetailsMapper, OrderItemDetailsRepository orderItemDetailsRepository, OrderItemDetailsMapper orderItemDetailsMapper, OrderPaymentDetailsRepository orderPaymentDetailsRepository, OrderPaymentDetailsMapper orderPaymentDetailsMapper) {
+    public CheckoutService(BillingDetailsRepository billingDetailsRepository, BillingDetailsMapper billingDetailsMapper,
+                           OrderDetailsRepository orderDetailsRepository, OrderDetailsMapper orderDetailsMapper,
+                           OrderItemDetailsRepository orderItemDetailsRepository, OrderItemDetailsMapper orderItemDetailsMapper,
+                           OrderPaymentDetailsRepository orderPaymentDetailsRepository, OrderPaymentDetailsMapper orderPaymentDetailsMapper,
+                           StockRepository stockRepository) {
         this.billingDetailsRepository = billingDetailsRepository;
         this.billingDetailsMapper = billingDetailsMapper;
         this.orderDetailsRepository = orderDetailsRepository;
@@ -38,6 +40,7 @@ public class CheckoutService implements CheckoutServiceI {
         this.orderItemDetailsMapper = orderItemDetailsMapper;
         this.orderPaymentDetailsRepository = orderPaymentDetailsRepository;
         this.orderPaymentDetailsMapper = orderPaymentDetailsMapper;
+        this.stockRepository = stockRepository;
     }
 
 

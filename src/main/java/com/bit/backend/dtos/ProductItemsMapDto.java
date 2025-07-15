@@ -6,15 +6,17 @@ public class ProductItemsMapDto {
     private Long id;
     private Long product;
     private String productName;
+    private Integer productQuantity;
     private List<ProductItemsDto> itemList;
 
     public ProductItemsMapDto() {
     }
 
-    public ProductItemsMapDto(Long id, Long product, String productName, List<ProductItemsDto> itemList) {
+    public ProductItemsMapDto(Long id, Long product, String productName, Integer productQuantity, List<ProductItemsDto> itemList) {
         this.id = id;
         this.product = product;
         this.productName = productName;
+        this.productQuantity = productQuantity;
         this.itemList = itemList;
     }
 
@@ -48,5 +50,13 @@ public class ProductItemsMapDto {
 
     public void setItemList(List<ProductItemsDto> itemList) {
         this.itemList = itemList;
+    }
+
+    public Integer getProductQuantity() {
+        return productQuantity;
+    }
+
+    public void setProductQuantity(Integer productQuantity) {
+        this.productQuantity = productQuantity;
     }
 }

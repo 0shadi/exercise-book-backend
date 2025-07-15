@@ -18,6 +18,9 @@ public class ProductItemsMapEntity {
     @Column(name = "product_name")
     private String productName;
 
+    @Column(name = "product_quantity")
+    private Integer productQuantity;
+
     @OneToMany(mappedBy = "productItemsMapEntity", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     private List<ProductItemsEntity> itemList = new ArrayList<>();
 
@@ -69,5 +72,13 @@ public class ProductItemsMapEntity {
 
     public void setProductName(String productName) {
         this.productName = productName;
+    }
+
+    public Integer getProductQuantity() {
+        return productQuantity;
+    }
+
+    public void setProductQuantity(Integer productQuantity) {
+        this.productQuantity = productQuantity;
     }
 }
