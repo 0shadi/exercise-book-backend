@@ -4,6 +4,7 @@ import com.bit.backend.dtos.CommonDataDto;
 import com.bit.backend.dtos.CommonDataListDto;
 
 import java.util.List;
+import java.util.Map;
 
 public interface CommonDataServiceI {
     List<CommonDataDto> getAvailablePrivilegesByGroupID(int id);
@@ -12,4 +13,8 @@ public interface CommonDataServiceI {
     List<CommonDataDto> getAvailableUsersByGroupID(int id);
     List<CommonDataDto> getAssignedUsersByGroupID(int id);
     CommonDataListDto saveGroupUserData(int id, CommonDataListDto commonDataListDto);
+    List<Map<String, Object>> getMonthlySales();
+    List<Map<String, Object>> getMonthlySalesIncome();
+    List<Map<String, Object>> getNoOfOrdersPlaceThisWeekByStatus();
+    List<Map<String, Object>> getSalesPerOrderItem();
 }
