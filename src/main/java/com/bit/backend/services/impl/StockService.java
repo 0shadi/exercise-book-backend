@@ -1,15 +1,21 @@
 package com.bit.backend.services.impl;
 
 import com.bit.backend.dtos.GRNaddedDTO;
+import com.bit.backend.dtos.SellingItemRegistrationDto;
 import com.bit.backend.dtos.StockDTO;
+import com.bit.backend.entities.SellingItemRegistrationEntity;
 import com.bit.backend.entities.StockEntitiy;
+import com.bit.backend.entities.SupplierRegistrationEntity;
+import com.bit.backend.exceptions.AppException;
 import com.bit.backend.mappers.StockMapper;
 import com.bit.backend.repositories.GRNaddedRepository;
 import com.bit.backend.repositories.StockRepository;
 import com.bit.backend.services.StockServiceI;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Base64;
 import java.util.List;
 import java.util.Optional;
 
@@ -74,6 +80,27 @@ public class StockService implements StockServiceI {
         StockEntitiy savedItem = stockRepository.save(newEntity);
         StockDTO stockDTO = stockMapper.toStockDto(savedItem);
         return stockDTO;
+    }
+
+
+    @Override
+    public StockDTO updateStockQty(int stockItemID, StockDTO stockDTO) {
+        try{
+            Optional<StockEntitiy> optionalEntity=stockRepository.findByStockItemID(stockItemID);
+
+            if(!optionalEntity.isPresent()){
+                throw new AppException("Item does not exist", HttpStatus.BAD_REQUEST);
+            }
+
+            StockEntitiy existingEntity = optionalEntity.get();
+            existingEntity.setQty(stockDTO.getQty());
+
+            StockEntitiy updatedEntity=stockRepository.save(existingEntity);
+            return stockMapper.toStockDto(updatedEntity);
+        }
+        catch (Exception e){
+            throw new AppException("Request failed with error" +e, HttpStatus.BAD_REQUEST);
+        }
     }
 
 

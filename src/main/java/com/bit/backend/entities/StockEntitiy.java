@@ -11,7 +11,7 @@ public class StockEntitiy {
     private Long id;
 
     @Column(name = "stockItemID")
-    private String stockItemID;
+    private int stockItemID;
 
     @Column(name = "stockItemName")
     private String stockItemName;
@@ -24,7 +24,7 @@ public class StockEntitiy {
     public StockEntitiy() {
     }
 
-    public StockEntitiy(Long id, String stockItemID, String stockItemName, int qty) {
+    public StockEntitiy(Long id, int stockItemID, String stockItemName, int qty) {
         this.id = id;
         this.stockItemID = stockItemID;
         this.stockItemName = stockItemName;
@@ -39,11 +39,11 @@ public class StockEntitiy {
         this.id = id;
     }
 
-    public String getStockItemID() {
+    public int getStockItemID() {
         return stockItemID;
     }
 
-    public void setStockItemID(String stockItemID) {
+    public void setStockItemID(int stockItemID) {
         this.stockItemID = stockItemID;
     }
 

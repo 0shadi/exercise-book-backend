@@ -14,6 +14,9 @@ public interface StockServiceI {
     StockDTO updateStockEdit(GRNaddedDTO grNaddedDTOS);
 
 
+    StockDTO updateStockQty(int stockItemID, StockDTO stockDTO);
+
+
 //    List<JobRoleDto> getJobRole();
 //    FormDemoDto updateFormDemo(long id, FormDemoDto formDemoDto);
 

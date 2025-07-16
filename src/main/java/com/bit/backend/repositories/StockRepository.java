@@ -15,4 +15,6 @@ public interface StockRepository extends JpaRepository<StockEntitiy, Long> {
 
     @Query(nativeQuery = true, value="SELECT * FROM stock WHERE stock_itemid = :itemID")
     StockEntitiy findByItemID(@Param("itemID") long itemID);
+
+    Optional<StockEntitiy> findByStockItemID(int stockItemID);
 }
