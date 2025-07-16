@@ -12,6 +12,12 @@ public class CustomerLoginEntity {
     @Column(name="customer_name")
     private String customerName;
 
+    @Column(name="first_name")
+    private String firstName;
+
+    @Column(name="last_name")
+    private String lastName;
+
     @Column(name="username")
     private String userName;
 
@@ -27,9 +33,11 @@ public class CustomerLoginEntity {
     public CustomerLoginEntity() {
     }
 
-    public CustomerLoginEntity(Long id, String customerName, String userName, String password, Long userId, Long customerId) {
+    public CustomerLoginEntity(Long id, String customerName, String firstName, String lastName, String userName, String password, Long userId, Long customerId) {
         this.id = id;
         this.customerName = customerName;
+        this.firstName = firstName;
+        this.lastName = lastName;
         this.userName = userName;
         this.password = password;
         this.userId = userId;
@@ -82,5 +90,21 @@ public class CustomerLoginEntity {
 
     public void setCustomerId(Long customerId) {
         this.customerId = customerId;
+    }
+
+    public String getFirstName() {
+        return firstName;
+    }
+
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
+
+    public String getLastName() {
+        return lastName;
+    }
+
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
     }
 }

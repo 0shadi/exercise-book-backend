@@ -27,13 +27,25 @@ public class CustomerLoginController {
         CustomerLoginDto loginDto = customerLoginDto;
 
         String password = new String(customerLoginDto.getPassword());
+        String firstName = "";
+        String lastName = "";
 
         customerLoginDto.setPassword(null);
         loginDto.setPassword(null);
 
         try{
 
-            SignUpDto signUpDto = new SignUpDto(customerLoginDto.getCustomerName(), customerLoginDto.getCustomerName(), customerLoginDto.getUserName(), password.toCharArray(), customerLoginDto.getRole(), null, null);
+            if (customerLoginDto.getCustomerType().equals("Retailer")) {
+                customerLoginDto.setLastName("Corporate");
+                customerLoginDto.setFirstName(customerLoginDto.getCustomerName());
+                firstName = customerLoginDto.getCustomerName();
+                lastName = customerLoginDto.getLastName();
+            } else {
+                firstName = customerLoginDto.getFirstName();
+                lastName = customerLoginDto.getLastName();
+            }
+
+            SignUpDto signUpDto = new SignUpDto(firstName, lastName, customerLoginDto.getUserName(), password.toCharArray(), customerLoginDto.getRole(), null, null);
 
             // add validations to check login already exists for customer
             boolean customerExist = customerLoginServiceI.checkIfCustomerExist(customerLoginDto);
@@ -61,8 +73,8 @@ public class CustomerLoginController {
                 newLoginDto.setUserId(userId);
                 loginDto = customerLoginServiceI.updateCustomer(loginId, newLoginDto);
 
-                SignUpDto updatedSignUpDto = new SignUpDto(loginDto.getCustomerName(), loginDto.getCustomerName(),
-                        loginDto.getUserName(),password.toCharArray(),"CUSTOMER", null, loginDto.getId());
+                SignUpDto updatedSignUpDto = new SignUpDto(firstName, lastName, loginDto.getUserName(),password.toCharArray(),"CUSTOMER",
+                                                                                                                null, loginDto.getId());
 
                 boolean isCustomerUpdated = userServiceI.updateUser(updatedSignUpDto, userId);
 
@@ -106,7 +118,19 @@ public class CustomerLoginController {
             CustomerLoginDto  updatedCustomer=customerLoginServiceI.updateCustomer(id,customerLoginDto);
             customerLoginDto.setUserId(updatedCustomer.getUserId());
 
-            SignUpDto signUpDto = new SignUpDto(customerLoginDto.getCustomerName(), customerLoginDto.getCustomerName(), customerLoginDto.getUserName(), passwordArray, customerLoginDto.getRole(), null, id);
+            String firstName = "";
+            String lastName = "";
+
+            if (customerLoginDto.getCustomerType().equals("Retailer")) {
+                customerLoginDto.setLastName("Corporate");
+                firstName = customerLoginDto.getCustomerName();
+                lastName = customerLoginDto.getLastName();
+            } else {
+                firstName = customerLoginDto.getFirstName();
+                lastName = customerLoginDto.getLastName();
+            }
+
+            SignUpDto signUpDto = new SignUpDto(firstName, lastName, customerLoginDto.getUserName(), passwordArray, customerLoginDto.getRole(), null, id);
             boolean value = userServiceI.updateUser(signUpDto, customerLoginDto.getUserId());
             return ResponseEntity.ok(updatedCustomer);
         }catch (Exception e){
