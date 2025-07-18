@@ -181,10 +181,11 @@ public class UserService implements UserServiceI {
                 user.setCustomerLoginId(signUpDto.customerLoginId());
             }
 
+            String decryptedPassword = RSADecryptor.decrypt(new String(signUpDto.password()));
 
             if (signUpDto.password().length > 0) {
-                if (!passwordEncoder.matches(CharBuffer.wrap(signUpDto.password()), user.getPassword())) {
-                    user.setPassword(passwordEncoder.encode(CharBuffer.wrap(signUpDto.password())));
+                if (!passwordEncoder.matches(CharBuffer.wrap(decryptedPassword), user.getPassword())) {
+                    user.setPassword(passwordEncoder.encode(CharBuffer.wrap(decryptedPassword)));
                 }
             }
             userRepository.save(user);
