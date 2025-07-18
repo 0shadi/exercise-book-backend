@@ -8,6 +8,8 @@ import com.bit.backend.exceptions.AppException;
 import com.bit.backend.mappers.UserMapper;
 import com.bit.backend.repositories.PrivilegeGroupRepository;
 import com.bit.backend.repositories.UserRepository;
+import com.bit.backend.services.CustomerLoginServiceI;
+import com.bit.backend.services.CustomerRegistrationServiceI;
 import com.bit.backend.services.UserServiceI;
 import jakarta.persistence.Tuple;
 import org.slf4j.Logger;
@@ -28,15 +30,20 @@ public class UserService implements UserServiceI {
     private final PasswordEncoder passwordEncoder;
     private final UserMapper userMapper;
     private final PrivilegeGroupRepository privilegeGroupRepository;
+    private final CustomerRegistrationServiceI customerRegistrationServiceI;
+    private final CustomerLoginServiceI customerLoginServiceI;
 
     private static final Logger logger = LoggerFactory.getLogger(UserService.class);
 
     public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder, UserMapper userMapper,
-                       PrivilegeGroupRepository privilegeGroupRepository) {
+                       PrivilegeGroupRepository privilegeGroupRepository, CustomerRegistrationServiceI customerRegistrationServiceI,
+                       CustomerLoginServiceI customerLoginServiceI) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
         this.userMapper = userMapper;
         this.privilegeGroupRepository = privilegeGroupRepository;
+        this.customerRegistrationServiceI = customerRegistrationServiceI;
+        this.customerLoginServiceI = customerLoginServiceI;
     }
 
     @Override
@@ -81,6 +88,25 @@ public class UserService implements UserServiceI {
             }
 
         }
+
+        // Register Customer on the System
+        CustomerRegistrationDto customerRegistrationDto = new CustomerRegistrationDto();
+        customerRegistrationDto.setCustomerName(signUpDto.firstName() + " " + signUpDto.lastName());
+        customerRegistrationDto.setFirstName(signUpDto.firstName());
+        customerRegistrationDto.setLastName(signUpDto.lastName());
+        customerRegistrationDto.setCustomerType("Individual Customer");
+        CustomerRegistrationDto savedCustomerRegistrationDto = this.customerRegistrationServiceI.addCustomerEntityOnUserRegister(customerRegistrationDto);
+
+        // Create Customer Login Entity
+        CustomerLoginDto customerLoginDto = new CustomerLoginDto();
+        customerLoginDto.setFirstName(signUpDto.firstName());
+        customerLoginDto.setLastName(signUpDto.lastName());
+        customerLoginDto.setUserName(signUpDto.login());
+        customerLoginDto.setUserId(savedUser.getId());
+        customerLoginDto.setCustomerId(savedCustomerRegistrationDto.getCustomerId());
+        customerLoginDto.setCustomerType(customerRegistrationDto.getCustomerType());
+        customerLoginDto.setCustomerName(customerRegistrationDto.getCustomerName());
+        CustomerLoginDto savedCustomerLoginDto = this.customerLoginServiceI.addCustomerLoginEntityOnUserRegister(customerLoginDto);
 
 
         return userMapper.toUserDto(savedUser);

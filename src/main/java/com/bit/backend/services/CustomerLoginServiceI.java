@@ -16,4 +16,6 @@ public interface CustomerLoginServiceI {
     boolean checkIfCustomerExist(CustomerLoginDto customerLoginDto);
 
     CustomerLoginDto getCustomerLogin(long id);
+
+    CustomerLoginDto addCustomerLoginEntityOnUserRegister(CustomerLoginDto customerLoginDto);
 }

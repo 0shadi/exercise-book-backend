@@ -83,5 +83,13 @@ public class CustomerRegistrationService implements CustomerRegistrationServiceI
        }
     }
 
+    @Override
+    public CustomerRegistrationDto addCustomerEntityOnUserRegister(CustomerRegistrationDto customerRegistrationDto) {
+        CustomerRegistrationEntity customerRegistrationEntity = customerRegistrationMapper.toCustomerRegistrationEntity(customerRegistrationDto);
+        CustomerRegistrationEntity savedEntity = customerRegistrationRepository.save(customerRegistrationEntity);
+        CustomerRegistrationDto savedDto = customerRegistrationMapper.toCustomerRegistrationDto(savedEntity);
+        return savedDto;
+    }
+
 }
 

@@ -117,5 +117,18 @@ public class CustomerLoginService implements CustomerLoginServiceI {
             throw new AppException("Error while getting customer login! Please try again", HttpStatus.BAD_REQUEST);
         }
     }
+
+    @Override
+    public CustomerLoginDto addCustomerLoginEntityOnUserRegister(CustomerLoginDto customerLoginDto) {
+        try{
+            CustomerLoginEntity customerLoginEntity =customerLoginMapper.toCustomerLoginEntity(customerLoginDto);
+            CustomerLoginEntity savedEntity=customerLoginRepository.save(customerLoginEntity );
+            CustomerLoginDto savedDto = customerLoginMapper.toCustomerLoginDto(savedEntity);
+
+            return savedDto;
+        }catch(Exception e){
+            throw new AppException("Request failed with error" +e, HttpStatus.BAD_REQUEST);
+        }
+    }
 }
 

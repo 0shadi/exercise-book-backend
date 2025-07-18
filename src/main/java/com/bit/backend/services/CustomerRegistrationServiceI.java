@@ -13,4 +13,6 @@ public interface CustomerRegistrationServiceI {
     CustomerRegistrationDto editCustomerEntity(long customerId, CustomerRegistrationDto customerRegistrationDto);
 
     CustomerRegistrationDto deleteCustomerEntity(long customerId);
+
+    CustomerRegistrationDto addCustomerEntityOnUserRegister(CustomerRegistrationDto customerRegistrationDto);
 }
