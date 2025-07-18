@@ -144,7 +144,7 @@ public class ProductItemMapService implements ProductItemsMapServiceI {
             ProductItemsMapEntity savedEntity = productItemMapRepository.save(productItemsMapEntity);
 
             SellingItemRegistrationDto sellingItemRegistrationDto = sellingItemRegistrationServiceI.getSellingItem(productItemsMapDto.getProduct());
-            sellingItemRegistrationDto.setItemQuantity(Integer.toString(productItemsMapDto.getProductQuantity()));
+            sellingItemRegistrationDto.setItemQuantity(Integer.toString(productItemsMapDto.getProductQuantity() + Integer.parseInt(sellingItemRegistrationDto.getItemQuantity())) );
             SellingItemRegistrationDto sellingItemDto = sellingItemRegistrationServiceI.updateSellingItemEntity(sellingItemRegistrationDto, productItemsMapDto.getProduct());
 
             ProductItemsMapDto savedDto = prodItemsMapMapper.toProdItemsMapDto(savedEntity);

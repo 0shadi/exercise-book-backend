@@ -9,6 +9,7 @@ import com.bit.backend.mappers.OrderItemDetailsMapper;
 import com.bit.backend.mappers.OrderPaymentDetailsMapper;
 import com.bit.backend.repositories.*;
 import com.bit.backend.services.CheckoutServiceI;
+import com.bit.backend.services.SellingItemRegistrationServiceI;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
@@ -26,12 +27,13 @@ public class CheckoutService implements CheckoutServiceI {
     private final OrderPaymentDetailsRepository orderPaymentDetailsRepository;
     private final OrderPaymentDetailsMapper orderPaymentDetailsMapper;
     private final StockRepository stockRepository;
+    private final SellingItemRegistrationServiceI sellingItemRegistrationServiceI;
 
     public CheckoutService(BillingDetailsRepository billingDetailsRepository, BillingDetailsMapper billingDetailsMapper,
                            OrderDetailsRepository orderDetailsRepository, OrderDetailsMapper orderDetailsMapper,
                            OrderItemDetailsRepository orderItemDetailsRepository, OrderItemDetailsMapper orderItemDetailsMapper,
                            OrderPaymentDetailsRepository orderPaymentDetailsRepository, OrderPaymentDetailsMapper orderPaymentDetailsMapper,
-                           StockRepository stockRepository) {
+                           StockRepository stockRepository, SellingItemRegistrationServiceI sellingItemRegistrationServiceI) {
         this.billingDetailsRepository = billingDetailsRepository;
         this.billingDetailsMapper = billingDetailsMapper;
         this.orderDetailsRepository = orderDetailsRepository;
@@ -41,6 +43,7 @@ public class CheckoutService implements CheckoutServiceI {
         this.orderPaymentDetailsRepository = orderPaymentDetailsRepository;
         this.orderPaymentDetailsMapper = orderPaymentDetailsMapper;
         this.stockRepository = stockRepository;
+        this.sellingItemRegistrationServiceI = sellingItemRegistrationServiceI;
     }
 
 
@@ -74,6 +77,19 @@ public class CheckoutService implements CheckoutServiceI {
             OrderItemDetailsEntity orderItemDetailsEntity=orderItemDetailsMapper.toOrderItemDetailsEntity(orderItemDetailsDto);
             OrderItemDetailsEntity savedOrderItemEntity=orderItemDetailsRepository.save(orderItemDetailsEntity);
             OrderItemDetailsDto savedOrderItemDto=orderItemDetailsMapper.toOrderItemDetailsDto(savedOrderItemEntity);
+
+            // reduce the quantity
+
+            long itemId = Long.parseLong(orderItemDetailsDto.getItemId());
+            int itemQty = Integer.parseInt(orderItemDetailsDto.getOrdQty());
+
+            SellingItemRegistrationDto sellingItemRegistrationDto = this.sellingItemRegistrationServiceI.getSellingItem(itemId);
+            long sellingItemId = sellingItemRegistrationDto.getItemId();
+
+            int remainingQty = Integer.parseInt(sellingItemRegistrationDto.getItemQuantity()) - itemQty;
+            sellingItemRegistrationDto.setItemQuantity(Integer.toString(remainingQty));
+            SellingItemRegistrationDto savedSellingItemDto = sellingItemRegistrationServiceI.updateSellingItemEntity(sellingItemRegistrationDto, sellingItemId);
+
             return savedOrderItemDto;
         }
         catch (Exception e){
