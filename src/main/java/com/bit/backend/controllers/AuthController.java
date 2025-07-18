@@ -2,6 +2,7 @@ package com.bit.backend.controllers;
 
 import com.bit.backend.config.UserAuthProvider;
 import com.bit.backend.dtos.*;
+import com.bit.backend.exceptions.AppException;
 import com.bit.backend.services.UserServiceI;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -31,9 +32,13 @@ public class AuthController {
 
     @PostMapping("/register")
     public ResponseEntity<UserDto> register(@RequestBody SignUpDto signUpDto) {
-        UserDto user = userServiceI.register(signUpDto);
-        user.setToken(userAuthProvider.createToken(user));
-        return ResponseEntity.created(URI.create("/users/" + user.getId())).body(user);
+        try {
+            UserDto user = userServiceI.register(signUpDto);
+            user.setToken(userAuthProvider.createToken(user));
+            return ResponseEntity.created(URI.create("/users/" + user.getId())).body(user);
+        } catch (Exception error) {
+            throw new AppException("Error occurred while registering! Please try again", HttpStatus.BAD_REQUEST);
+        }
     }
 
     @GetMapping("/get-auth-ids/{id}")

@@ -2,9 +2,11 @@ package com.bit.backend.services.impl;
 
 import com.bit.backend.config.RSADecryptor;
 import com.bit.backend.dtos.*;
+import com.bit.backend.entities.PrivilegeGroup;
 import com.bit.backend.entities.User;
 import com.bit.backend.exceptions.AppException;
 import com.bit.backend.mappers.UserMapper;
+import com.bit.backend.repositories.PrivilegeGroupRepository;
 import com.bit.backend.repositories.UserRepository;
 import com.bit.backend.services.UserServiceI;
 import jakarta.persistence.Tuple;
@@ -25,13 +27,16 @@ public class UserService implements UserServiceI {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     private final UserMapper userMapper;
+    private final PrivilegeGroupRepository privilegeGroupRepository;
 
     private static final Logger logger = LoggerFactory.getLogger(UserService.class);
 
-    public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder, UserMapper userMapper) {
+    public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder, UserMapper userMapper,
+                       PrivilegeGroupRepository privilegeGroupRepository) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
         this.userMapper = userMapper;
+        this.privilegeGroupRepository = privilegeGroupRepository;
     }
 
     @Override
@@ -52,16 +57,32 @@ public class UserService implements UserServiceI {
     }
 
     @Override
-    public UserDto register(SignUpDto signUpDto) {
+    public UserDto register(SignUpDto signUpDto) throws Exception {
         Optional<User> oUser = userRepository.findByLogin(signUpDto.login());
 
         if (oUser.isPresent()) {
-            throw new AppException("User Already Exists", HttpStatus.BAD_REQUEST);
+            throw new AppException("User Name Already Exists", HttpStatus.BAD_REQUEST);
         }
         User user = userMapper.signUpToUser(signUpDto);
 
-        user.setPassword(passwordEncoder.encode(CharBuffer.wrap(signUpDto.password())));
+        String decryptedPassword = RSADecryptor.decrypt(new String(signUpDto.password()));
+
+        user.setPassword(passwordEncoder.encode(CharBuffer.wrap(decryptedPassword.toCharArray())));
         User savedUser = userRepository.save(user);
+
+        if (savedUser.getRole().equals("CUSTOMER")) {
+            // SET DEFAULT PRIVILEGE GROUP
+            int id = savedUser.getId().intValue();
+            Optional<List<PrivilegeGroup>> privilegeGroupList = privilegeGroupRepository.findByDefaultValue(true);
+
+            if (privilegeGroupList.isPresent()) {
+                int authGroupId = privilegeGroupList.get().get(0).getId().intValue();
+                privilegeGroupRepository.setAuthGroupToCustomer(authGroupId, id);
+            }
+
+        }
+
+
         return userMapper.toUserDto(savedUser);
     }
 
