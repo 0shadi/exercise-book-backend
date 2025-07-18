@@ -1,5 +1,6 @@
 package com.bit.backend.services.impl;
 
+import com.bit.backend.config.RSADecryptor;
 import com.bit.backend.dtos.*;
 import com.bit.backend.entities.User;
 import com.bit.backend.exceptions.AppException;
@@ -34,12 +35,18 @@ public class UserService implements UserServiceI {
     }
 
     @Override
-    public UserDto login(CredentialsDto credentialsDto) {
+    public UserDto login(CredentialsDto credentialsDto) throws Exception {
         logger.debug("Entering in login Method...");
         User user = userRepository.findByLogin(credentialsDto.login()).orElseThrow(() -> new AppException("Unknown User", HttpStatus.NOT_FOUND));
 
-        if (passwordEncoder.matches(CharBuffer.wrap(credentialsDto.password()), user.getPassword())) {
-            return userMapper.toUserDto(user);
+        String decryptedPassword = RSADecryptor.decrypt(new String(credentialsDto.password()));
+
+        try {
+            if (passwordEncoder.matches(CharBuffer.wrap(decryptedPassword.toCharArray()), user.getPassword())) {
+                return userMapper.toUserDto(user);
+            }
+        } catch (Exception e) {
+            throw new AppException("Error Occurred", HttpStatus.BAD_REQUEST);
         }
         throw new AppException("Invalid password", HttpStatus.BAD_REQUEST);
     }
