@@ -145,6 +145,23 @@ public class UserService implements UserServiceI {
     }
 
     @Override
+    public UserDto register(SignUpDto signUpDto, String path, String tag) throws Exception {
+        Optional<User> oUser = userRepository.findByLogin(signUpDto.login());
+
+        if (oUser.isPresent()) {
+            throw new AppException("User Name Already Exists", HttpStatus.BAD_REQUEST);
+        }
+        User user = userMapper.signUpToUser(signUpDto);
+
+        String decryptedPassword = RSADecryptor.decrypt(new String(signUpDto.password()));
+
+        user.setPassword(passwordEncoder.encode(CharBuffer.wrap(decryptedPassword.toCharArray())));
+        User savedUser = userRepository.save(user);
+
+        return userMapper.toUserDto(savedUser);
+    }
+
+    @Override
     public List<Integer> getAuthIds(long userId) {
         Optional<List<Integer>> optionalAuthIdLists = userRepository.findAuthIdsByUserId(userId);
         List<Integer> authIdLists = optionalAuthIdLists.get();

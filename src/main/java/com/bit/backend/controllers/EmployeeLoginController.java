@@ -58,7 +58,7 @@ public class EmployeeLoginController {
             /*Create Login Entity*/
             EmployeeLoginDto employeeLoginDtoResponse = employeeLoginServiceI.addEmployeeLoginEntity(employeeLoginDto);
             /*Create User Entity*/
-            UserDto user = userServiceI.register(signUpDto);
+            UserDto user = userServiceI.register(signUpDto, "emplogin","createemployee");
 
             if (user.getId() != null) {
                 long loginId = employeeLoginDtoResponse.getId();

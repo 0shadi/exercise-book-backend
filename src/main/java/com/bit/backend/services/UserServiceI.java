@@ -8,6 +8,7 @@ public interface UserServiceI {
     UserDto login(CredentialsDto credentialsDto) throws Exception;
     UserDto register(SignUpDto signUpDto) throws Exception;
     UserDto register(SignUpDto signUpDto, String path) throws Exception;
+    UserDto register(SignUpDto signUpDto, String path, String tag) throws Exception;
     List<Integer> getAuthIds(long userId);
     SystemPrivilegeListDto getSystemPrivileges();
     List<Integer> setSystemPrivileges(SystemPrivilegeListDto systemPrivilegeListDto);
