@@ -141,10 +141,10 @@ public class UserService implements UserServiceI {
     }
 
     @Override
-    public boolean checkIfUserNameExistForOtherUsers(String userName) {
+    public boolean checkIfUserNameExistForOtherUsers(String userName, long id) {
         try {
 
-            List<User> userList = userRepository.checkIfUserNameExistForOtherUsers(userName);
+            List<User> userList = userRepository.checkIfUserNameExistForOtherUsers(userName, id);
 
             if (userList.size() > 0) {
                 return true;

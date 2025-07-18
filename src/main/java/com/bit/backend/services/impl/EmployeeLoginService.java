@@ -101,4 +101,18 @@ public class EmployeeLoginService implements EmployeeLoginServiceI {
             throw new AppException("Request failed with error" +e, HttpStatus.BAD_REQUEST);
         }
     }
+
+    @Override
+    public EmployeeLoginDto getEmployee(long id) {
+        try {
+            Optional<EmployeeLoginEntity> oEmployeeLoginEntity = employeeLoginRepository.findById(id);
+            if (!oEmployeeLoginEntity.isPresent()) {
+                throw new AppException("Employee not found!", HttpStatus.BAD_REQUEST);
+            }
+
+            return employeeLoginMapper.toEmployeeLoginDto(oEmployeeLoginEntity.get());
+        } catch (Exception e) {
+            throw new AppException("Error while getting employee login! Please try again", HttpStatus.BAD_REQUEST);
+        }
+    }
 }

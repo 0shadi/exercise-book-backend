@@ -36,6 +36,11 @@ public class EmployeeLoginController {
                                                                             password.toCharArray(), employeeLoginDto.getRole(), null, null);
 
 
+            // validation to check if login name has spaces
+            if (employeeLoginDto.getUserName().contains(" ")) {
+                throw new AppException("Username cannot contain spaces", HttpStatus.NOT_FOUND);
+            }
+
             // validation to check if a login already exists for employee
             boolean employeeExist = employeeLoginServiceI.checkIfEmployeeExist(employeeLoginDto);
 
@@ -88,7 +93,8 @@ public class EmployeeLoginController {
     @PutMapping("/employee-login/{id}")
     public ResponseEntity<EmployeeLoginDto> updateEmployee(@PathVariable long id, @RequestBody EmployeeLoginDto employeeLoginDto){
         try{
-            boolean userExist = userServiceI.checkIfUserNameExistForOtherUsers(employeeLoginDto.getUserName());
+            EmployeeLoginDto oldEmployeeLogin = employeeLoginServiceI.getEmployee(id);
+            boolean userExist = userServiceI.checkIfUserNameExistForOtherUsers(employeeLoginDto.getUserName(), oldEmployeeLogin.getUserId());
             if(userExist){
                 throw new AppException("User name already exists",HttpStatus.NOT_FOUND);
             }

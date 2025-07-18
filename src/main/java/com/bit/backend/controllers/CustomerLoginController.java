@@ -47,6 +47,11 @@ public class CustomerLoginController {
 
             SignUpDto signUpDto = new SignUpDto(firstName, lastName, customerLoginDto.getUserName(), password.toCharArray(), customerLoginDto.getRole(), null, null);
 
+            // validation to check if login name has spaces
+            if (customerLoginDto.getUserName().contains(" ")) {
+                throw new AppException("Username cannot contain spaces", HttpStatus.NOT_FOUND);
+            }
+
             // add validations to check login already exists for customer
             boolean customerExist = customerLoginServiceI.checkIfCustomerExist(customerLoginDto);
 
@@ -101,7 +106,13 @@ public class CustomerLoginController {
     public ResponseEntity<CustomerLoginDto> updateCustomer(@PathVariable long id, @RequestBody CustomerLoginDto customerLoginDto){
         try{
 
-            boolean userExist = userServiceI.checkIfUserNameExist(customerLoginDto.getUserName());
+            // validation to check if login name has spaces
+            if (customerLoginDto.getUserName().contains(" ")) {
+                throw new AppException("Username cannot contain spaces", HttpStatus.NOT_FOUND);
+            }
+
+            CustomerLoginDto oldCustomerLoginDto = customerLoginServiceI.getCustomerLogin(id);
+            boolean userExist = userServiceI.checkIfUserNameExistForOtherUsers(customerLoginDto.getUserName(), oldCustomerLoginDto.getUserId());
 
             if (userExist) {
                 throw new AppException("User Name Already Exists", HttpStatus.NOT_FOUND);
