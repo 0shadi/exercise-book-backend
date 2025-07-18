@@ -113,6 +113,38 @@ public class UserService implements UserServiceI {
     }
 
     @Override
+    public UserDto register(SignUpDto signUpDto, String path) throws Exception {
+        try {
+            Optional<User> oUser = userRepository.findByLogin(signUpDto.login());
+
+            if (oUser.isPresent()) {
+                throw new AppException("User Name Already Exists", HttpStatus.BAD_REQUEST);
+            }
+            User user = userMapper.signUpToUser(signUpDto);
+
+            String decryptedPassword = RSADecryptor.decrypt(new String(signUpDto.password()));
+
+            user.setPassword(passwordEncoder.encode(CharBuffer.wrap(decryptedPassword.toCharArray())));
+            User savedUser = userRepository.save(user);
+
+            if (savedUser.getRole().equals("CUSTOMER")) {
+                // SET DEFAULT PRIVILEGE GROUP
+                int id = savedUser.getId().intValue();
+                Optional<List<PrivilegeGroup>> privilegeGroupList = privilegeGroupRepository.findByDefaultValue(true);
+
+                if (privilegeGroupList.isPresent()) {
+                    int authGroupId = privilegeGroupList.get().get(0).getId().intValue();
+                    privilegeGroupRepository.setAuthGroupToCustomer(authGroupId, id);
+                }
+
+            }
+            return userMapper.toUserDto(savedUser);
+        } catch (Exception e) {
+            throw new AppException("Error Occurred Please try again!", HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @Override
     public List<Integer> getAuthIds(long userId) {
         Optional<List<Integer>> optionalAuthIdLists = userRepository.findAuthIdsByUserId(userId);
         List<Integer> authIdLists = optionalAuthIdLists.get();

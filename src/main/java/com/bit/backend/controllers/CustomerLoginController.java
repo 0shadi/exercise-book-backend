@@ -69,7 +69,7 @@ public class CustomerLoginController {
             /*Create Login Entity*/
             CustomerLoginDto customerLoginDtoResponse = customerLoginServiceI.addCustomerLoginEntity(customerLoginDto);
             /*Create User Entity*/
-            UserDto user = userServiceI.register(signUpDto);
+            UserDto user = userServiceI.register(signUpDto, "loginpath");
 
             if (user.getId() != null) {
                 long loginId = customerLoginDtoResponse.getId();
